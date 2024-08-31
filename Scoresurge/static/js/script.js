@@ -58,7 +58,7 @@ document.addEventListener('keydown', function(event) {
         // Preven the broswer save .html thingy
         event.preventDefault();
 
-        // Without this, the save is blank
+        // Without this, the save is blank (moving the note stuff from div to input field)
         document.getElementById('note-content').value = document.getElementById('editor').innerHTML;
         document.getElementById('note-form').submit(); // Trigger form submission
     }
@@ -98,6 +98,7 @@ window.onload = function() {
 window.onresize = function() {
     adjustToolbar();
 };
+
 
 document.getElementById('note-form').addEventListener('submit', function() {
     const editorContent = document.getElementById('editor').innerHTML;

@@ -6,12 +6,12 @@ from datetime import datetime
 
 # Flask config.
 app = Flask(__name__, template_folder="templates")
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///.database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./database.db"
 
 # Database config.
 db = SQLAlchemy(app)
 
-
+# Api
 api = Api(app)
 
 
@@ -23,13 +23,6 @@ class Notes(db.Model):
     
     def __repr__(self) -> str:
         return f"Content: {self.content}"
-
-
-
-
-
-
-
 
 
 # Defining multiple routes for the same function.
@@ -44,10 +37,11 @@ def notes(page_id):
     
     note = Notes.query.filter_by(page_id=page_id).first()
     
+    
     if (request.method == "POST"):
+        # Grabbing the text inside the user's notes.
         note_content = request.form['content']
 
-        print(note_content)
 
         if note:
             note.content = note_content
