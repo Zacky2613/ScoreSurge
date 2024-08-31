@@ -1,0 +1,156 @@
+
+
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+/* Handling header information */
+
+.header {
+    display: flex;
+    margin: none;
+    width: 100%;
+    align-items: center;
+    height: 5%;
+    background-color: black;
+    color: white;
+    position: fixed;
+}
+
+.header-left {
+    display: flex;
+}
+
+.header p {
+    margin: 0;
+}
+
+#scoresurge {
+    font-size: 24px;
+}
+
+#menu-btn {
+    background-color: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+/* Changing the menu icon from black to white */
+#menu-icon {
+    filter: invert(1);
+}
+
+
+
+/* Side nav section */
+
+.sidenav {
+    position: fixed;
+    top: 5%;
+    height: 100%;
+    width: 15%;
+    background-color: bisque;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* The items in the navbar */
+.dropdown,
+.sidenav a {
+    flex: 0 0 7%; 
+    text-align: center;
+    line-height: 10vh; 
+    
+    
+    background-color: #f1f1f1; 
+    color: black; 
+    
+    padding: 0; 
+    margin: 0; 
+    
+    text-decoration: none; 
+    border-bottom: 1px solid #ccc; 
+}
+
+/* don't touch, it works */
+.dropdown .dropdown-content {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f1f1;
+
+    
+    max-height: 0; 
+    overflow: hidden;
+    transition: max-height 0.3s ease; 
+}
+
+
+.dropdown .dropdown-content a {
+    flex: 0 0 7%;
+    line-height: 3vh;
+    
+    text-align: left;
+    
+    padding-left: 50px;
+    border: none;
+
+
+}
+
+
+.dropdown .dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+}
+
+
+.dropdown-toggle::after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    width: 16px;
+    height: 16px;
+    background: url("../icons/chevron-right.svg");
+    background-size: contain;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+
+.dropdown.active .dropdown-toggle::after {
+    transform: rotate(90deg); 
+}
+
+/* Expand dropdown with transition */
+.dropdown.active .dropdown-content {
+    max-height: 300px; /* Adjust to fit content size */
+    display: flex;
+}
+
+#class-icon {
+    padding-right: 5px;
+    width: 15px;
+    height: 15px;
+}
+
+/*  CONTENT STUFF */
+
+.content {
+    margin-left: 15%; /* Adjusts content to the right of the sidebar */
+    padding: 20px;
+    padding-top: 50px;
+}

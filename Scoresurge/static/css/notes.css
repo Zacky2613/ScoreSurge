@@ -1,0 +1,87 @@
+
+
+.notes-textbox {
+    padding: 10px;
+}
+
+
+/* TOOLBAR SECTION */
+
+.toolbar {
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+    color: black; /* Ensure text color is black for regular text */
+}
+
+
+.toolbar button {
+    padding: 5px 10px;
+
+    font-size: 16px;
+    border: none;
+    background-color: white;
+
+    cursor: pointer;
+    margin-right: 5px;
+    border-radius: 7px;
+}
+
+.toolbar button:hover {
+    background-color: #ddd;
+}
+
+/* When the bold/ */
+.toolbar button.active {
+    background-color: #ddd;
+    padding: 5px 10px;
+
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 5px;
+    
+    border: 1px solid grey;
+}
+
+
+
+
+
+.font-selection {
+    /* Matching the button stuff */
+    padding: 5px 10px;
+    font-size: 16px;
+
+}
+
+
+/* TEXTBOX SECTION */
+
+.textbox-container {
+    width: 100%;
+    /* This is required for resize */
+    position: relative;
+}
+
+
+/* The text editing box */
+#editor {
+    min-height: 150px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: black; 
+
+    /* Allows the editor to be change horz. and vert. */
+    resize: both;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+/* Styling for the placeholder text */
+#editor.placeholder:empty:before {
+    content: 'Type your text here...';
+    color: grey;
+    font-style: italic; 
+}

@@ -1,0 +1,71 @@
+<!-- <!DOCTYPE html> -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS import -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+
+    {% block styles %}{% endblock %}
+
+    <!-- Importing icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <title>ScoreSurge</title>
+</head>
+<body>
+    <div class="header">
+        <!-- Splitting the header in 2, elements to co-exist on different sides -->
+        <!-- TODO: FINISH HEADER ELEMENTS (NOTICATION BELL, NAME, SETTINGS ICON) -->
+
+        <div class="header-left">
+            <button type="button" id="menu-btn"><img id="menu-icon" src="{{ url_for('static', filename='icons/menu.svg') }}"></button>
+
+            <p id="scoresurge">ScoreSurge</p>
+        </div>
+
+        <div class="header-right">
+
+        </div>
+    </div>
+
+
+    <!-- Side bar html -->
+    <div class="sidenav">
+        <a href="/home">Home</a>
+        <a href="#">TimeTable</a>
+        <a href="#">Study Tracker</a>
+        <a href="#">Grade</a>
+
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle">Classes</a>
+
+            <div class="dropdown-content">
+                <a href="./home.html"><img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">Bio & Marine</a>
+                <a href="#"><img id="class-icon" src="{{ url_for('static', filename='icons/pie-chart.svg') }}">Maths Methods</a>
+                <a href="#"><img id="class-icon" src="{{ url_for('static', filename='icons/book.svg') }}">English</a>
+                <a href="#"><img id="class-icon" src="{{ url_for('static', filename='icons/terminal.svg') }}">Digital Technologies</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle">Notes</a>
+
+            <div class="dropdown-content">
+                <a href="{{ url_for('notes', page_id='bio_marine_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">Bio & Marine</a>
+                <a href="{{ url_for('notes', page_id='math_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/pie-chart.svg') }}">Maths Methods</a>
+                <a href="{{ url_for('notes', page_id='english_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/book.svg') }}">English</a>
+                <a href="{{ url_for('notes', page_id='digital_technologies_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/terminal.svg') }}">Digital Technologies</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content">
+        {% block content %}{% endblock %}
+        
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+<!-- Importing different css files -->
+{% block styles %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/notes.css') }}">
+
+{% endblock %}
+
+
+
+<!-- Content block. -->
+{% block content %}
+
+<div class="notes-textbox">
+
+    <form id="note-form" action="{{ url_for('notes', page_id=page_id) }}" method="POST">
+
+        <div class="toolbar">
+            <button type="submit" id="save-btn"><img id="class-icon" src="{{ url_for('static', filename='icons/save.svg') }}"></button>
+
+            <button type="button" id="text-format-btn" onclick="formatText('bold')"><b>B</b></button>
+            <button type="button" id="text-format-btn" onclick="formatText('italic')"><i>I</i></button>
+            <button type="button" id="text-format-btn" onclick="formatText('underline')"><u>U</u></button>
+            
+            <select onchange="changeFont(this.value)" class="font-selection">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+
+            <button type="button" onclick="changeFontSize('increase')">A+</button>
+        </div>
+        
+        <div class="textbox-container">
+
+            <div id="editor" contenteditable="true">
+                {{ note.content|safe if note else '' }}
+            </div>
+
+            <input type="hidden" name="content" id="note-content">
+        </div>
+
+    </form>
+</div>
+
+
+
+{% endblock %}
