@@ -14,4 +14,4 @@ ScoreSruge contains many features to improve student learning, these include:
 
 ## Competition
 
-This project was created as a submission for the FNQ CQU DATTA competiton. I am very grateful for this opportunity and I'm more than happy to see digital technologies being encourage in FNQ.
+This project was created as a submission for the FNQ CQU DATTA competiton. I am very grateful for this opportunity and I'm more than happy to see digital technologies being encourage in FNQ
