@@ -25,10 +25,26 @@
         </div>
 
         <div class="header-right">
-
+            <!-- TODO: LOGIN NAME SYSTEM HERE: -->
+            <p>{{ username}}</p>
+            <button type="button" id="settings-btn"><img id="settings-icon" src="{{ url_for('static', filename='icons/settings.svg') }}"></button>
         </div>
     </div>
 
+
+    <div id="classModal" class="modal">
+        <div class="modal-content">
+
+            <span class="close">&times;</span>
+
+
+            <form id="new-class-form" action="{{ url_for('create_class') }}" method="post">
+                <label for="class-name">Enter Class Name:</label>
+                <input type="text" id="class-name" name="class_name" required>
+                <button type="submit">Add Class</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Side bar html -->
     <div class="sidenav">
@@ -38,24 +54,47 @@
         <a href="#">Grade</a>
 
         <div class="dropdown">
-            <a href="#" class="dropdown-toggle">Classes</a>
+
+            <a href="#" class="dropdown-toggle">
+                <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>
+
+                <p id="dropdown-toggle-header">Classes</p>
+
+                <button type="submit" id="add-btn"></button>
+            </a>
+
 
             <div class="dropdown-content">
-                <a href="./home.html"><img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">Bio & Marine</a>
-                <a href="#"><img id="class-icon" src="{{ url_for('static', filename='icons/pie-chart.svg') }}">Maths Methods</a>
-                <a href="#"><img id="class-icon" src="{{ url_for('static', filename='icons/book.svg') }}">English</a>
-                <a href="#"><img id="class-icon" src="{{ url_for('static', filename='icons/terminal.svg') }}">Digital Technologies</a>
+                
             </div>
         </div>
 
         <div class="dropdown">
-            <a href="#" class="dropdown-toggle">Notes</a>
+
+            <a href="#" class="dropdown-toggle">
+                <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>
+
+                <p id="dropdown-toggle-header">Notes</p>
+            </a>
 
             <div class="dropdown-content">
-                <a href="{{ url_for('notes', page_id='bio_marine_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">Bio & Marine</a>
-                <a href="{{ url_for('notes', page_id='math_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/pie-chart.svg') }}">Maths Methods</a>
-                <a href="{{ url_for('notes', page_id='english_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/book.svg') }}">English</a>
-                <a href="{{ url_for('notes', page_id='digital_technologies_notes') }}"><img id="class-icon" src="{{ url_for('static', filename='icons/terminal.svg') }}">Digital Technologies</a>
+
+                <!-- If there are no notes -->
+                {% if notes | length < 1 %}
+                    <p> you have no notes.</p>
+
+                <!-- Displaying notes -->
+                {% else %}
+                    {% for note in notes %}
+
+                        <a href="{{ url_for('notes', page_id=note.page_id) }}">
+                            <img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">
+                            {{ note.note_name }}
+                        </a>
+
+                    {% endfor %}
+                {% endif %}
+
             </div>
         </div>
     </div>

@@ -17,21 +17,31 @@
     <form id="note-form" action="{{ url_for('notes', page_id=page_id) }}" method="POST">
 
         <div class="toolbar">
-            <button type="submit" id="save-btn"><img id="class-icon" src="{{ url_for('static', filename='icons/save.svg') }}"></button>
 
-            <button type="button" id="text-format-btn" onclick="formatText('bold')"><b>B</b></button>
-            <button type="button" id="text-format-btn" onclick="formatText('italic')"><i>I</i></button>
-            <button type="button" id="text-format-btn" onclick="formatText('underline')"><u>U</u></button>
-            
-            <select onchange="changeFont(this.value)" class="font-selection">
-                <option value="Arial">Arial</option>
-                <option value="Courier New">Courier New</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Verdana">Verdana</option>
-            </select>
+            <!-- Save Button -->
+            <div class="save-btn">
+                <button type="submit"><img id="class-icon" src="{{ url_for('static', filename='icons/save.svg') }}"></button>
+            </div>
 
-            <button type="button" onclick="changeFontSize('increase')">A+</button>
+            <!-- Toolbar Tools -->
+            <div class="tools">
+                <button type="button" id="text-format-btn" onclick="formatText('bold')"><b>B</b></button>
+                <button type="button" id="text-format-btn" onclick="formatText('italic')"><i>I</i></button>
+                <button type="button" id="text-format-btn" onclick="formatText('underline')"><u>U</u></button>
+                
+                <!-- Font Selection -->
+                <select onchange="changeFont(this.value)" class="font-selection">
+                    <option value="Arial">Arial</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                </select>
+                
+                
+                <button type="button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+
         </div>
         
         <div class="textbox-container">
