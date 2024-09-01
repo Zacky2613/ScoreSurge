@@ -8,6 +8,8 @@
 /* TOOLBAR SECTION */
 
 .toolbar {
+    display: flex;
+
     border: 1px solid #ddd;
     padding: 10px;
     font-size: 16px;
@@ -44,19 +46,18 @@
 }
 
 
-
-
-
 .font-selection {
     /* Matching the button stuff */
     padding: 5px 10px;
     font-size: 16px;
+}
 
+#save-btn {
+    border-right: 1px solid grey;
 }
 
 
 /* TEXTBOX SECTION */
-
 .textbox-container {
     width: 100%;
     /* This is required for resize */
@@ -77,11 +78,4 @@
     resize: both;
     box-sizing: border-box;
     overflow: auto;
-}
-
-/* Styling for the placeholder text */
-#editor.placeholder:empty:before {
-    content: 'Type your text here...';
-    color: grey;
-    font-style: italic; 
 }
