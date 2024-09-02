@@ -16,7 +16,6 @@
 <body>
     <div class="header">
         <!-- Splitting the header in 2, elements to co-exist on different sides -->
-        <!-- TODO: FINISH HEADER ELEMENTS (NOTICATION BELL, NAME, SETTINGS ICON) -->
 
         <div class="header-left">
             <button type="button" id="menu-btn"><img id="menu-icon" src="{{ url_for('static', filename='icons/menu.svg') }}"></button>
@@ -26,7 +25,7 @@
 
         <div class="header-right">
             <!-- TODO: LOGIN NAME SYSTEM HERE: -->
-            <p>{{ username}}</p>
+            <p>{{ username }}</p>
             <button type="button" id="settings-btn"><img id="settings-icon" src="{{ url_for('static', filename='icons/settings.svg') }}"></button>
         </div>
     </div>

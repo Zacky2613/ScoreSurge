@@ -22,8 +22,6 @@ window.onclick = function(event) {
 }
 
 
-
-
 document.addEventListener('DOMContentLoaded', function() {
 
     // Becuase there's more than one dropdown mean, must use all.
