@@ -31,15 +31,15 @@
     </div>
 
 
+    <!-- Modal Code (for text box creating) -->
     <div id="classModal" class="modal">
         <div class="modal-content">
 
-            <span class="close">&times;</span>
-
+            <span class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></span>
 
             <form id="new-class-form" action="{{ url_for('create_class') }}" method="post">
-                <label for="class-name">Enter Class Name:</label>
-                <input type="text" id="class-name" name="class_name" required>
+                <label for="class-name">Name of new class: </label>
+                <input type="text" id="class-name" name="class_name" autocomplete="off">
                 <button type="submit">Add Class</button>
             </form>
         </div>
@@ -52,7 +52,8 @@
         <a href="#">Study Tracker</a>
         <a href="#">Grade</a>
 
-        <div class="dropdown">
+        <!-- Allows for the dropdown to be active in notes.html and classes.html -->
+        <div class="dropdown {% block class_active %}{% endblock %}">
 
             <a href="#" class="dropdown-toggle">
                 <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>
@@ -64,11 +65,25 @@
 
 
             <div class="dropdown-content">
-                
+                <!-- If there are no notes -->
+                {% if classes | length < 1 %}
+                    <p> you have no notes.</p>
+
+                <!-- Displaying notes -->
+                {% else %}
+                    {% for class in classes %}
+
+                        <a href="{{ url_for('classes', page_id=class.page_id) }}">
+                            <img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">
+                            {{ class.class_name }}
+                        </a>
+
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
 
-        <div class="dropdown">
+        <div class="dropdown {% block note_active %}{% endblock %}">
 
             <a href="#" class="dropdown-toggle">
                 <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>

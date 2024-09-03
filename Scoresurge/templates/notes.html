@@ -7,20 +7,20 @@
 
 {% endblock %}
 
-
+<!-- Making the notes dropdown active -->
+{% block note_active %}active{% endblock %}
 
 <!-- Content block. -->
 {% block content %}
 
 <div class="notes-textbox">
-
     <form id="note-form" action="{{ url_for('notes', page_id=page_id) }}" method="POST">
 
         <div class="toolbar">
 
             <!-- Save Button -->
             <div class="save-btn">
-                <button type="submit"><img id="class-icon" src="{{ url_for('static', filename='icons/save.svg') }}"></button>
+                <button type="submit"><img id="save-icon" src="{{ url_for('static', filename='icons/save.svg') }}"></button>
             </div>
 
             <!-- Toolbar Tools -->
@@ -49,6 +49,7 @@
             <div id="editor" contenteditable="true">
                 {{ note.content|safe if note else '' }}
             </div>
+
 
             <input type="hidden" name="content" id="note-content">
         </div>
