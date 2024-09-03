@@ -11,11 +11,24 @@
     display: flex;
 
     border: 1px solid #ddd;
-    padding: 10px;
     font-size: 16px;
     color: black; /* Ensure text color is black for regular text */
 }
 
+.save-btn {
+    border-right: 1px solid grey;
+    padding: 10px;
+}
+
+#save-icon {
+    padding: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.tools {
+    padding: 10px;
+}
 
 .toolbar button {
     padding: 5px 10px;
@@ -27,6 +40,10 @@
     cursor: pointer;
     margin-right: 5px;
     border-radius: 7px;
+}
+
+.save-btn button{
+    margin: 0 !important;
 }
 
 .toolbar button:hover {
@@ -51,11 +68,6 @@
     padding: 5px 10px;
     font-size: 16px;
 }
-
-#save-btn {
-    border-right: 1px solid grey;
-}
-
 
 /* TEXTBOX SECTION */
 .textbox-container {
