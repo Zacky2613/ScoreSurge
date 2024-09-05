@@ -1,25 +1,42 @@
 
-var modal = document.getElementById("classModal");
 
-var btn = document.getElementById("add-btn");
 
-var span = document.getElementsByClassName("close")[0];
+// -=-=-= MODALS -=-=-=
 
-document.getElementById("add-btn").onclick = function() {
-    modal.style.display = "block";
-}
+// Modal variables
+var class_modal = document.getElementById("class-modal");
+var add_to_planner_modal = document.getElementById("add-to-planner-modal");
+var planner_modal = document.getElementById("planner-modal");
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
+// 
+var modal_close_btn = document.querySelectorAll(".close");
+console.log(modal_close_btn)
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+document.querySelectorAll("#add-btn").forEach(button => {
+    button.addEventListener("click", function(event) {
+        console.log(event.target.className)
+        
+        if (event.target.className === "add-class-btn") {
+            class_modal.style.display = "flex"
+        } else if (event.target.className === "add-to-planner-btn") {
+            add_to_planner_modal.style.display = "flex"
+        } else if (event.target.className === "make-planner-btn") {
+            planner_modal.style.display = "flex"
+        }
+
+    });
+});
+
+
+// Click X to close the modal
+modal_close_btn.forEach(button => {
+    button.addEventListener("click", function(event) {
+        class_modal.style.display = "none";
+        add_to_planner_modal.style.display = "none";
+        planner_modal.style.display = "none";
+    });
+});
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -94,7 +111,7 @@ function adjustToolbar() {
 
     // Changing the toolbar width
     // Why the -20? I honestly don't know, it stops the overhand with the toolbar
-    toolbar.style.width = editor.clientWidth-20 + "px";
+    toolbar.style.width = editor.clientWidth + "px";
 }
 
 // Function to handle resizing of the editor
