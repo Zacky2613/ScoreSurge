@@ -122,6 +122,10 @@ body {
     border: none;
 }
 
+.dropdown-content p {
+    font-size: 20px;
+}
+
 
 .dropdown .dropdown-content a:hover {
     background-color: #ddd;
@@ -209,6 +213,8 @@ body {
 .modal {
     /* Becuase of its size, it has to be block */
     display: none;
+    align-items: center;
+    justify-content: center;
     
     position: fixed;
     /* making sure it's on top of all */
@@ -227,7 +233,7 @@ body {
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; 
+    margin: 15%; 
     padding: 20px;
     border: 1px solid #888;
     width: 50%;
