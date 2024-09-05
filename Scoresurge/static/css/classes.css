@@ -1,0 +1,53 @@
+
+
+/* MODAL CSS */
+
+.period-section {
+    display: block;
+}
+
+.period-section {
+    margin-bottom: 10px; 
+}
+
+.period-section label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.period-section input {
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+
+
+table, tr, th, td, caption {
+    border: 1px solid;
+}
+
+table {
+
+    /* table-layout: fixed; */
+    width: 75%;
+
+}
+
+td:not(#week-row) {
+    width: 30% !important;
+}
+
+#no-class {
+    background-color: rgb(149, 235, 149);
+}
+
+#revision-assessment {
+    background-color: bisque;
+}
+
+#lesson-header {
+    text-align: center;
+    font-weight: 500;
+    text-decoration: underline;
+}

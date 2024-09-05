@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+<!-- Importing different css files -->
+{% block styles %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/classes.css') }}">
+
+{% endblock %}
+
+<!-- Making the notes dropdown active -->
+{% block class_active %}active{% endblock %}
+
+
+
+{% block more_modals %}
+
+<div id="planner-modal" class="modal">
+    <div class="modal-content">
+
+        <div class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></div>
+
+        <form id="new-class-form" action="{{ url_for('create_class_planner', page_id=page_id) }}" method="post">
+
+            <label for="classes-input">When do you have the class? Please use this format and in order: "Monday P1 | Tuesday P2 | Wednesday P3"</label>
+            <input type="text" id="classes-input" name="days_of_week" autocomplete="off">
+
+            <button type="submit">Make Planner</button>
+        </form>
+    </div>
+</div>
+
+
+<div id="add-to-planner-modal" class="modal">
+    <div class="modal-content">
+
+        <div class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></div>
+
+        <form id="planner-add-onto" action="{{ url_for('create_class') }}" method="post">
+
+            <label for="week-number">Week Number: </label>
+            <input type="text" id="week-number" name="week_number" autocomplete="off">
+
+            <div class="period-section">
+                {% for item in schedule %}
+                    <p> Infomation for: {{ item.day_of_week }}: </p>
+    
+                    <!-- Loop.index my goat -->
+                    <label for="period-header-{{ loop.index }}">Period Title (e.g: Polynomials, Persauive Devices): </label>
+                    <input type="text" id="period-header-{{ loop.index }}" name="period-header" autocomplete="off">
+    
+                    <label for="period-content-{{ loop.index }}">Period Content: </label><br>
+                    <input type="text" id="period-content-{{ loop.index }}" name="day_of_week" autocomplete="off">
+    
+    
+                    <!-- <th>{{ item.day_of_week }}</th> -->
+    
+                {% endfor %}
+            </div>
+
+            <button type="submit">Add to planner</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+
+<!-- Content block. -->
+{% block content %}
+    <!-- 
+    Have an information graphic near the top
+    which has teacher, class, class type (elective or core subject)
+    general or ATAR
+    -->
+    <div class="class-info">
+        work on <br>
+    </div>
+
+    {% if schedule | length < 1 %}
+        <p>You don't have a planner, would you like to make one?</p>
+
+    {% else %}
+        <table>
+            <caption>{{ class_data.class_name }} Lesson Planner Term 3</caption>
+            <tr>
+                <th></th>
+
+                {% if schedule | length < 1 %}
+                    <p>You don't have a planner, would you like to make one?</p>
+                    
+
+                    <!-- Displaying notes -->
+                {% else %}
+                    {% for item in schedule %}
+
+                        <th>{{ item.day_of_week }}</th>
+
+                    {% endfor %}
+                {% endif %}
+                
+                <!-- <th>Monday P2</th>
+                <th>Thursday P1</th>
+                <th>Friday P4</th> -->
+            </tr>
+            <tr>
+            
+                <!-- Bit Boch, but to have a side header I gotta do this -->
+
+                <td id="week-row">Week 1</td> 
+                <!--
+                <td>
+                    <p id="lesson-header">Jacaranda Exercise 12.3: Measures of spread</p><br>
+                    •	Central tendency ppt and have students do calculations<br>
+                    •	PPT The effects of outliers<br>
+                    •	Discuss measures of spread<br>
+                    •	Calculate range and IQR <br>
+                    •	Worked example 5, 8 (see teacher notes)<br>
+                    
+                    <br>
+                    Jacaranda Ex12.3:<br>
+                    Questions:<br><br>
+                    
+                    SF: Q2a-d, Q3, Q9a-b, Q10  <br>
+                    
+                    CU: Q13<br><br>
+                    Lesson notes: 1. Measures of spread - IQR and range (J12.3)
+                    
+                    
+                    
+                </td>
+                <td id="revision-assessment">Revision Time</td>
+                
+                <td id="no-class">Sports Carnival</td> -->
+            </tr>
+        </table>
+    {% endif %} 
+    
+    <br>
+    {% if schedule | length < 1 %}
+        <button type="submit" id="add-btn" class="make-planner-btn">Make a new planner</button>
+    {% else %}
+        <button type="submit" id="add-btn" class="add-to-planner-btn">Add onto planner</button>
+    {% endif %} 
+
+
+
+    
+
+{% endblock %}
