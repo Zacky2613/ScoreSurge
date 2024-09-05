@@ -32,10 +32,12 @@
 
 
     <!-- Modal Code (for text box creating) -->
-    <div id="classModal" class="modal">
+
+    <!-- Class & Note Creating: -->
+    <div id="class-modal" class="modal">
         <div class="modal-content">
 
-            <span class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></span>
+            <div class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></div>
 
             <form id="new-class-form" action="{{ url_for('create_class') }}" method="post">
                 <label for="class-name">Name of new class: </label>
@@ -44,6 +46,12 @@
             </form>
         </div>
     </div>
+
+    <!-- Planner Week Adding: -->
+
+
+    {% block more_modals %}{% endblock %}
+
 
     <!-- Side bar html -->
     <div class="sidenav">
@@ -60,14 +68,14 @@
 
                 <p id="dropdown-toggle-header">Classes</p>
 
-                <button type="submit" id="add-btn"></button>
+                <button type="submit" id="add-btn" class="add-class-btn"></button>
             </a>
 
 
             <div class="dropdown-content">
                 <!-- If there are no notes -->
                 {% if classes | length < 1 %}
-                    <p> you have no notes.</p>
+                    <p> You have no classes.</p>
 
                 <!-- Displaying notes -->
                 {% else %}
@@ -95,7 +103,7 @@
 
                 <!-- If there are no notes -->
                 {% if notes | length < 1 %}
-                    <p> you have no notes.</p>
+                    <p> You have no notes. </p>
 
                 <!-- Displaying notes -->
                 {% else %}
