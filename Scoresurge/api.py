@@ -36,9 +36,11 @@ class Classes(db.Model):
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    
     week_number = db.Column(db.Integer)
     day_of_week = db.Column(db.String(20)) 
     class_name = db.Column(db.Text)
+    
     content_title = db.Column(db.String(60))
     content = db.Column(db.Text)
     
@@ -62,14 +64,66 @@ def classes(page_id):
     class_data = Classes.query.filter_by(page_id=page_id).first()
     schedule_data = Schedule.query.filter_by(class_name=class_data.class_name).all()
     
+    
     return render_template(
         "classes.html", 
-        class_data=class_data, 
-        schedule=schedule_data, 
+        class_data=class_data,
+        schedule=schedule_data,
         page_id=page_id
     )
 
 
+@app.route("/add_to_class_planner/<string:page_id>", methods=["POST"])
+def add_to_class_planner(page_id):
+    class_data = Classes.query.filter_by(page_id=page_id).first()
+    
+    week_number = request.form["week_number"]
+    day_of_weeks = request.form.getlist("day_of_week[]")
+    period_headers = request.form.getlist("period-header[]")
+    period_contents = request.form.getlist("period-content[]")
+    
+    print(day_of_weeks)
+    print(period_headers)
+    
+    # Delete old entries if the user is trying to edit them
+    Schedule.query.filter_by(
+        class_name=class_data.class_name, 
+        week_number=week_number
+    ).delete()
+    
+    # Since these two should be the same length, we can just iterate through one
+    for i in range(len(period_headers)):
+        header = period_headers[i]
+        content = period_contents[i]
+        day_of_week = day_of_weeks[i]
+        
+        print(f"Header: {header}")
+        print(f"Content: {content}")
+        
+        new_week_entry = Schedule(
+            class_name=class_data.class_name, 
+            week_number=week_number,
+            day_of_week=day_of_week,
+            content_title=header,
+            content=content,
+        )
+        
+        db.session.add(new_week_entry)
+        db.session.commit()
+        
+    
+    return redirect(url_for('classes', page_id=page_id))
+
+@app.route("/debug_schedule_data")
+def debug_schedule_data():
+    # Fetch all schedule data
+    all_schedules = Schedule.query.all()
+    
+    # Print all entries
+    for schedule in all_schedules:
+        print(f"Week Number: {schedule.week_number}, Day of Week: {schedule.day_of_week}, Title: {schedule.content_title}, Content: {schedule.content}")
+    
+    return "Check your console for the debug output.", 200
 
 
 @app.route("/create_class_planner/<string:page_id>", methods=["POST"])
@@ -83,7 +137,7 @@ def create_class_planner(page_id):
     for item in clean_class_times:
         day = item.replace(" ", "").replace("yP", "y P")
 
-        new_day = Schedule(class_name=class_data.class_name, day_of_week=day)
+        new_day = Schedule(class_name=class_data.class_name, day_of_week=day, week_number=1)
         db.session.add(new_day)
         
         db.session.commit()
@@ -155,10 +209,18 @@ def inject_data():
     classes = Classes.query.all() 
     schedule = Schedule.query.all() 
     
+    grouped_schedule = {}
+    for schedule in schedule:
+        if schedule.week_number not in grouped_schedule:
+            grouped_schedule[schedule.week_number] = []
+            
+        grouped_schedule[schedule.week_number].append(schedule)
+    
     data = {
         "notes": notes,
         "classes": classes,
         "schedule": schedule,
+        "grouped_schedule": grouped_schedule,
         "username": "John Doe"
     }
     
