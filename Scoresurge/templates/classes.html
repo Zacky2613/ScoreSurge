@@ -32,29 +32,50 @@
 
 <div id="add-to-planner-modal" class="modal">
     <div class="modal-content">
-
         <div class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></div>
 
-        <form id="planner-add-onto" action="{{ url_for('create_class') }}" method="post">
+        
+        <form id="planner-add-onto" action="{{ url_for('add_to_class_planner', page_id=page_id) }}" method="post">
 
             <label for="week-number">Week Number: </label>
             <input type="text" id="week-number" name="week_number" autocomplete="off">
 
+            
             <div class="period-section">
+
+                {% set first_period = [] %}
+                {% set fake_break = [] %}
                 {% for item in schedule %}
-                    <p> Infomation for: {{ item.day_of_week }}: </p>
-    
-                    <!-- Loop.index my goat -->
-                    <label for="period-header-{{ loop.index }}">Period Title (e.g: Polynomials, Persauive Devices): </label>
-                    <input type="text" id="period-header-{{ loop.index }}" name="period-header" autocomplete="off">
-    
-                    <label for="period-content-{{ loop.index }}">Period Content: </label><br>
-                    <input type="text" id="period-content-{{ loop.index }}" name="day_of_week" autocomplete="off">
-    
-    
-                    <!-- <th>{{ item.day_of_week }}</th> -->
-    
+                    {% if fake_break[0] != True %}
+
+                        {% if item.day_of_week != None and item.day_of_week != first_period[0] %}
+                            <br><p> Infomation for {{ item.day_of_week }}: </p>
+                    
+                            <div class="period-information">
+                                <!-- This is to parse into the backend -->
+                                <input type="hidden" name="day_of_week[]" value="{{ item.day_of_week }}">
+                                
+                                <label for="period-header-{{ loop.index }}">Period Title (e.g: Polynomials, Persauive Devices): </label>
+                                <input type="text" id="period-header-{{ loop.index }}" name="period-header[]" autocomplete="off"><br>
+                
+                                <br><label for="period-content-{{ loop.index }}">Period Content: </label>
+                                <br><input type="text" id="period-content-{{ loop.index }}" class="period-content-{{ loop.index}}" name="period-content[]" autocomplete="off">
+                                
+                                <!-- This is the hidden input that the period-content puts itself in -->
+                                <input type="hidden" name="content[]" id="note-content">
+                            </div>
+                        {% else %}
+                            {% set _ = fake_break.append(True) %}
+                        {% endif %}
+
+                                                    <!-- First time through -->
+                        {% if loop.index == 1 %}
+                            {% set _ = first_period.append(item.day_of_week) %}
+                        {% endif %}
+                    {% endif %}
                 {% endfor %}
+
+
             </div>
 
             <button type="submit">Add to planner</button>
@@ -82,56 +103,76 @@
     {% else %}
         <table>
             <caption>{{ class_data.class_name }} Lesson Planner Term 3</caption>
-            <tr>
-                <th></th>
 
-                {% if schedule | length < 1 %}
-                    <p>You don't have a planner, would you like to make one?</p>
-                    
+            <thead>
+                <tr>
+                    <!-- Blank for the side column -->
+                    <th>Week</th>
 
-                    <!-- Displaying notes -->
-                {% else %}
+                    {% set first_period = [] %}
+                    {% set fake_break = [] %}
                     {% for item in schedule %}
+                        {% if fake_break[0] != True %}
 
-                        <th>{{ item.day_of_week }}</th>
+                            {% if item.day_of_week != None and item.day_of_week != first_period[0] %}
+                                <th>{{ item.day_of_week }}</th>
+                            {% else %}
+                                {% set _ = fake_break.append(True) %}
+                            {% endif %}
 
+                                                        <!-- First time through -->
+                            {% if loop.index == 1 %}
+                                {% set _ = first_period.append(item.day_of_week) %}
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}
-                {% endif %}
-                
-                <!-- <th>Monday P2</th>
-                <th>Thursday P1</th>
-                <th>Friday P4</th> -->
-            </tr>
-            <tr>
-            
-                <!-- Bit Boch, but to have a side header I gotta do this -->
+                </tr>
+            </thead>
 
-                <td id="week-row">Week 1</td> 
-                <!--
-                <td>
-                    <p id="lesson-header">Jacaranda Exercise 12.3: Measures of spread</p><br>
-                    •	Central tendency ppt and have students do calculations<br>
-                    •	PPT The effects of outliers<br>
-                    •	Discuss measures of spread<br>
-                    •	Calculate range and IQR <br>
-                    •	Worked example 5, 8 (see teacher notes)<br>
+            <tbody>
+                {% for week_number, class_schedule in grouped_schedule.items() %}
+                    <tr>
+                    <td id="week-row">Week {{ week_number }}</td> 
+
+
+                    {% for week_class in class_schedule %}
+                        <td>
+                            <p id="lesson-header">{{ week_class.content_title }}</p>
+
+                            <p>{{ week_class.content }}</p>
+                        </td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+
+
+                    <!--
+                    <td>
+                        <p id="lesson-header">Jacaranda Exercise 12.3: Measures of spread</p><br>
+                        •	Central tendency ppt and have students do calculations<br>
+                        •	PPT The effects of outliers<br>
+                        •	Discuss measures of spread<br>
+                        •	Calculate range and IQR <br>
+                        •	Worked example 5, 8 (see teacher notes)<br>
+                        
+                        <br>
+                        Jacaranda Ex12.3:<br>
+                        Questions:<br><br>
+                        
+                        SF: Q2a-d, Q3, Q9a-b, Q10  <br>
+                        
+                        CU: Q13<br><br>
+                        Lesson notes: 1. Measures of spread - IQR and range (J12.3)
+                        
+                        
+                        
+                    </td>
+                    <td id="revision-assessment">Revision Time</td>
                     
-                    <br>
-                    Jacaranda Ex12.3:<br>
-                    Questions:<br><br>
-                    
-                    SF: Q2a-d, Q3, Q9a-b, Q10  <br>
-                    
-                    CU: Q13<br><br>
-                    Lesson notes: 1. Measures of spread - IQR and range (J12.3)
-                    
-                    
-                    
-                </td>
-                <td id="revision-assessment">Revision Time</td>
-                
-                <td id="no-class">Sports Carnival</td> -->
-            </tr>
+                    <td id="no-class">Sports Carnival</td> -->
+
+            </tbody>
+            
         </table>
     {% endif %} 
     

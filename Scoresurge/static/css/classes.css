@@ -10,18 +10,28 @@
     margin-bottom: 10px; 
 }
 
-.period-section label {
-    display: block;
+.period-information {
     margin-bottom: 10px;
+
+    border: 1px solid black;
+    border-radius: 5px;
+
+    padding: 10px;
 }
 
-.period-section input {
-    display: block;
-    margin-bottom: 5px;
+.period-information .period-content {
+    width: 100%; /* Full width */
+    height: auto;
+    resize: both; /* Prevent manual resizing */
+    box-sizing: border-box;
+    overflow: hidden; /* Hide scrollbars */
+    min-height: 50px; /* Minimum height */
+    padding: 10px; /* Add some padding */
+    line-height: 1.5; /* Line height for readability */
 }
 
 
-
+/*  */
 
 table, tr, th, td, caption {
     border: 1px solid;
