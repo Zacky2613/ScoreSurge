@@ -14,6 +14,13 @@ db = SQLAlchemy(app)
 # Api
 api = Api(app)
 
+class Grades(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    class_name = db.Column(db.String(50), nullable=False, unique=True)
+    grade_semester_1 = db.Column(db.String(5), nullable=False)
+    grade_semester_2 = db.Column(db.String(5), nullable=False)
+    
+    
 
 class Notes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +35,12 @@ class Notes(db.Model):
 class Classes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_name = db.Column(db.String(50), nullable=False, unique=True)
-    page_id = db.Column(db.String(50), nullable=False, unique=True)
+    page_id = db.Column(db.String(40), nullable=False, unique=True)
+    teacher = db.Column(db.String(30))
+    class_room = db.Column(db.String(20))
+    
+    # grades = db.Column(db.String(20))
+    # class_room = db.Column(db.String(20))
     
     def __repr__(self) -> str:
         return f"Schedule: {self.content}"
@@ -42,11 +54,9 @@ class Schedule(db.Model):
     class_name = db.Column(db.Text)
     
     content_title = db.Column(db.String(60))
+    period_type = db.Column(db.String(40))
     content = db.Column(db.Text)
-    
-    # teacher = db.Column(db.String(40))
-    # TODO = db.Column(db.String(40), nullable=True)
-    
+
     
     def __repr__(self) -> str:
         return f"Schedule: {self.content}"
@@ -72,6 +82,33 @@ def classes(page_id):
         page_id=page_id
     )
 
+@app.route("/grades")
+def grades():
+    grades_data = Grades.query.all()
+    
+    return render_template(
+        "grades.html",
+        grades=grades_data
+    )
+
+@app.route("/edit_grades", methods=["POST"])
+def edit_grades():
+    grades = Grades.query.all()
+    
+    for grade in grades:
+        selected_grade_semester_1 = request.form.get(f"new_grade_semester_1_{grade.id}")
+        selected_grade_semester_2 = request.form.get(f"new_grade_semester_2_{grade.id}")
+        
+        # Updating the new grades
+        if selected_grade_semester_1:
+            grade.grade_semester_1 = selected_grade_semester_1
+            
+        if selected_grade_semester_1:
+            grade.grade_semester_2 = selected_grade_semester_2
+    
+    db.session.commit()
+
+    return redirect(url_for("grades"))
 
 @app.route("/add_to_class_planner/<string:page_id>", methods=["POST"])
 def add_to_class_planner(page_id):
@@ -80,10 +117,7 @@ def add_to_class_planner(page_id):
     week_number = request.form["week_number"]
     day_of_weeks = request.form.getlist("day_of_week[]")
     period_headers = request.form.getlist("period-header[]")
-    period_contents = request.form.getlist("period-content[]")
-    
-    print(day_of_weeks)
-    print(period_headers)
+    period_contents = request.form.getlist("content[]")
     
     # Delete old entries if the user is trying to edit them
     Schedule.query.filter_by(
@@ -96,9 +130,7 @@ def add_to_class_planner(page_id):
         header = period_headers[i]
         content = period_contents[i]
         day_of_week = day_of_weeks[i]
-        
-        print(f"Header: {header}")
-        print(f"Content: {content}")
+
         
         new_week_entry = Schedule(
             class_name=class_data.class_name, 
@@ -137,10 +169,14 @@ def create_class_planner(page_id):
     for item in clean_class_times:
         day = item.replace(" ", "").replace("yP", "y P")
 
-        new_day = Schedule(class_name=class_data.class_name, day_of_week=day, week_number=1)
-        db.session.add(new_day)
-        
+        new_planner = Schedule(
+            class_name=class_data.class_name, 
+            day_of_week=day,  
+            week_number=1
+        )
+        db.session.add(new_planner)
         db.session.commit()
+        
         x += 1
 
     return redirect(url_for('classes', page_id=page_id))
@@ -150,6 +186,11 @@ def create_class_planner(page_id):
 @app.route("/create_note_and_class", methods=["POST"])
 def create_class():
     note_and_class_title = request.form["class_name"]
+    teacher_name = request.form["teacher"]
+    class_room = request.form["class_room"]
+    grade_semester_1 = request.form["grade_semester_1"]
+    grade_semester_2 = request.form["grade_semester_2"]
+    
 
     page_id = note_and_class_title.lower().replace(" ", "_")
     note_and_class_title_clean = page_id.replace("_", " ").title()
@@ -158,8 +199,21 @@ def create_class():
 
     # If the new class is unqiue
     if not existing_class:
-        new_class = Classes(class_name=note_and_class_title_clean, page_id=page_id)
+        new_grades = Grades(
+            class_name=note_and_class_title_clean,
+            grade_semester_1=grade_semester_1,
+            grade_semester_2=grade_semester_2
+        )
+        
+        new_class = Classes(
+            class_name=note_and_class_title_clean, 
+            page_id=page_id,
+            teacher=teacher_name,
+            class_room=class_room
+        )
+        
         db.session.add(new_class)
+        db.session.add(new_grades)
 
         new_note = Notes(note_name=note_and_class_title_clean, page_id=page_id, content="")
         db.session.add(new_note)
