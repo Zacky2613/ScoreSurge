@@ -40,8 +40,21 @@
             <div class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></div>
 
             <form id="new-class-form" action="{{ url_for('create_class') }}" method="post">
-                <label for="class-name">Name of new class: </label>
-                <input type="text" id="class-name" name="class_name" autocomplete="off">
+                <label for="class-name">Name of new class*</label>
+                <br><input type="text" id="class-name" name="class_name" autocomplete="off" required><br><br>
+
+                <label for="teacer-name">Teacher* </label>
+                <br><input type="text" id="teacher-name" name="teacher" autocomplete="off" required><br><br>
+
+                <label for="class-room">Class room* </label>
+                <br><input type="text" id="class-room" name="class_room" autocomplete="off" required><br><br>
+
+                <label for="grade-semester-1">Grade Semester 1: </label>
+                <input type="text" id="grade-semester-1" name="grade_semester_1" autocomplete="off"><br>
+
+                <label for="grade-semester-2">Grade Semester 2: </label>
+                <input type="text" id="grade-semester-2" name="grade_semester_2" autocomplete="off"><br>
+
                 <button type="submit">Add Class</button>
             </form>
         </div>
@@ -58,7 +71,7 @@
         <a href="/home">Home</a>
         <a href="#">TimeTable</a>
         <a href="#">Study Tracker</a>
-        <a href="#">Grade</a>
+        <a href="{{ url_for('grades') }}">Grades</a>
 
         <!-- Allows for the dropdown to be active in notes.html and classes.html -->
         <div class="dropdown {% block class_active %}{% endblock %}">
@@ -126,7 +139,9 @@
         {% block content %}{% endblock %}
         
     </div>
+    
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    {% block scripts %}{% endblock %}
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
