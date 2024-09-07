@@ -1,0 +1,30 @@
+
+
+
+table, tr, th, td, caption {
+    border: 1px solid;
+}
+
+table {
+    width: 50%;
+    font-weight: 500;
+}
+
+#class-info-header {
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.edit-grades-btn {
+    margin-top: 5px;
+    cursor: pointer;
+    background-color: white;
+    border: none;
+}
+
+.edit-grades-btn:hover {
+    background-color: rgb(218, 218, 218);
+    border: 1px solid black;
+    border-radius: 5px;
+}

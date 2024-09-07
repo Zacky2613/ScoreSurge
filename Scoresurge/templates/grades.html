@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+<!-- Importing different css files -->
+{% block styles %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/grades.css') }}">
+
+{% endblock %}
+
+{% block more_modals %}
+
+<div id="edit-grades-modal" class="modal">
+    <div class="modal-content">
+
+        <div class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></div>
+
+        <form id="edit-grades-form" action="{{ url_for('edit_grades') }}" method="post">
+
+            {% set grade_options = ["A", "B", "C", "D", "E", ""] %}
+            {% for item in grades %}
+                <p>{{ item.class_name }}</p>
+
+                <label for="grade-change-semester-1">Semester 1: </label>
+                <select name="new_grade_semester_1_{{ item.id }}" id="grade-change-semester-1" name="new_grade">
+                    {% for grade in grade_options %}
+                        <label for="grade-change">semester 1</label>
+                        <option value="{{ grade }}" {% if item.grade_semester_1 == grade %}selected{% endif %}>
+                            {{ grade if grade != "" else "None" }}
+                        </option>
+                    {% endfor %}
+                </select><br>
+
+                <label for="grade-change-semester-2">Semester 2:</label>
+                <select name="new_grade_semester_2_{{ item.id }}" id="grade-change-semester-2" name="new_grade">
+                    {% for grade in grade_options %}
+                        <label for="grade-change">semester 1</label>
+                        <option value="{{ grade }}" {% if item.grade_semester_2 == grade %}selected{% endif %}>
+                            {{ grade if grade != "" else "None" }}
+                        </option>
+                    {% endfor %}
+                </select><br>
+            {% endfor %}
+
+            <button type="submit">Edit Grades</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+    <p id="class-info-header">
+        Grades for all classes:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <!-- Blank for the side column -->
+                <th>Class</th>
+                <th>Semester 1</th>
+                <th>Semester 2</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in grades %}
+                <tr>
+                    <td> {{ item.class_name }}</td>
+                    <td> {{ item.grade_semester_1 }}</td> 
+                    <td> {{ item.grade_semester_2 }}</td> 
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="submit" id="add-btn" class="edit-grades-btn">
+        <img src="{{ url_for('static', filename='icons/edit.svg') }}">
+    </button>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/grades.js') }}"></script>
+{% endblock %}
+
