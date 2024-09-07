@@ -1,7 +1,5 @@
 
-
 /* MODAL CSS */
-
 .period-section {
     display: block;
 }
@@ -20,18 +18,58 @@
 }
 
 .period-information .period-content {
-    width: 100%; /* Full width */
+
+    border: 1px solid grey;
+    border-radius: 5px;
+
+    /* width: 100%;
     height: auto;
-    resize: both; /* Prevent manual resizing */
+    resize: both;
     box-sizing: border-box;
-    overflow: hidden; /* Hide scrollbars */
-    min-height: 50px; /* Minimum height */
-    padding: 10px; /* Add some padding */
-    line-height: 1.5; /* Line height for readability */
+    overflow: hidden;
+    min-height: 50px;
+    padding: 10px;
+    line-height: 1.5; */
+}
+
+.period-section #period-info-title {
+    font-weight: 500;
+}
+
+/* CLASS INFORMATION CSS */
+.class-info {
+    display: flex;
+
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+
+    width: auto;
+    height: auto;
+
+    border: 1px solid black;
+    border-radius: 10px;
+
+    /* Seperating from the table     */
+    margin-bottom: 25px;
+}
+
+#class-info-header {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.class-info div {
+    text-align: center;
+    align-items: center;
+    padding: 10px;
+    border-right: 1px solid black;
 }
 
 
-/*  */
+
+
+/* TABLE CSS */
 
 table, tr, th, td, caption {
     border: 1px solid;
@@ -46,6 +84,7 @@ table {
 
 td:not(#week-row) {
     width: 30% !important;
+    vertical-align: top
 }
 
 #no-class {

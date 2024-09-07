@@ -34,11 +34,11 @@
     <div class="modal-content">
         <div class="close"><img src="{{ url_for('static', filename='icons/x.svg') }}"></div>
 
-        
+
         <form id="planner-add-onto" action="{{ url_for('add_to_class_planner', page_id=page_id) }}" method="post">
 
             <label for="week-number">Week Number: </label>
-            <input type="text" id="week-number" name="week_number" autocomplete="off">
+            <input type="text" id="week-number" name="week_number" autocomplete="off" required>
 
             
             <div class="period-section">
@@ -49,26 +49,30 @@
                     {% if fake_break[0] != True %}
 
                         {% if item.day_of_week != None and item.day_of_week != first_period[0] %}
-                            <br><p> Infomation for {{ item.day_of_week }}: </p>
+                            <br><p id="period-info-title"> Infomation for {{ item.day_of_week }}: </p>
                     
                             <div class="period-information">
                                 <!-- This is to parse into the backend -->
                                 <input type="hidden" name="day_of_week[]" value="{{ item.day_of_week }}">
                                 
                                 <label for="period-header-{{ loop.index }}">Period Title (e.g: Polynomials, Persauive Devices): </label>
-                                <input type="text" id="period-header-{{ loop.index }}" name="period-header[]" autocomplete="off"><br>
+                                <input type="text" id="period-header-{{ loop.index }}" name="period-header[]" autocomplete="off" required><br>
                 
                                 <br><label for="period-content-{{ loop.index }}">Period Content: </label>
-                                <br><input type="text" id="period-content-{{ loop.index }}" class="period-content-{{ loop.index}}" name="period-content[]" autocomplete="off">
+                                <!-- <br><input type="text" id="period-content-{{ loop.index }}" class="period-content-{{ loop.index}}" name="period-content[]" autocomplete="off"> -->
                                 
+                                <div class="period-content" id="period-content-{{ loop.index }}" contenteditable="true" autocomplete="off">
+                                    
+                                </div>
+
                                 <!-- This is the hidden input that the period-content puts itself in -->
-                                <input type="hidden" name="content[]" id="note-content">
+                                <input type="hidden" name="content[]" id="hidden-period-content-{{ loop.index }}">
                             </div>
                         {% else %}
                             {% set _ = fake_break.append(True) %}
                         {% endif %}
 
-                                                    <!-- First time through -->
+                        <!-- First time through -->
                         {% if loop.index == 1 %}
                             {% set _ = first_period.append(item.day_of_week) %}
                         {% endif %}
@@ -93,14 +97,40 @@
     which has teacher, class, class type (elective or core subject)
     general or ATAR
     -->
+
+    <p id="class-info-header">
+        Class Information:
+    </p>
     <div class="class-info">
-        work on <br>
+        <div class="class-name">
+            <img src="{{ url_for('static', filename='icons/book.svg') }}"/>  
+            <p>{{ class_data.class_name }}</p>
+        </div>
+        
+        <div class="teacher">
+            <img src="{{ url_for('static', filename='icons/user.svg') }}"/>
+            <p>{{ class_data.teacher }}</p>
+        </div>
+
+        <div class="class-room">
+            <img src="{{ url_for('static', filename='icons/box.svg') }}"/> 
+            <p>{{ class_data.class_room }}</p>
+        </div>
+
+        <div class="grades">
+            <img src="{{ url_for('static', filename='icons/award.svg') }}"/>
+            <p>A</p>
+        </div>
     </div>
+
 
     {% if schedule | length < 1 %}
         <p>You don't have a planner, would you like to make one?</p>
 
     {% else %}
+        <p id="class-info-header">
+            Class Planner:
+        </p>
         <table>
             <caption>{{ class_data.class_name }} Lesson Planner Term 3</caption>
 
@@ -120,7 +150,7 @@
                                 {% set _ = fake_break.append(True) %}
                             {% endif %}
 
-                                                        <!-- First time through -->
+                            <!-- First time through -->
                             {% if loop.index == 1 %}
                                 {% set _ = first_period.append(item.day_of_week) %}
                             {% endif %}
@@ -139,12 +169,11 @@
                         <td>
                             <p id="lesson-header">{{ week_class.content_title }}</p>
 
-                            <p>{{ week_class.content }}</p>
+                            <p>{{ week_class.content|safe if week_class else '' }}</p>
                         </td>
                     {% endfor %}
                     </tr>
                 {% endfor %}
-
 
                     <!--
                     <td>
@@ -184,7 +213,8 @@
     {% endif %} 
 
 
+{% endblock %}
 
-    
-
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/classes.js') }}"></script>
 {% endblock %}
