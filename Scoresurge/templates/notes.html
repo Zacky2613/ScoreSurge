@@ -10,6 +10,12 @@
 <!-- Making the notes dropdown active -->
 {% block note_active %}active{% endblock %}
 
+<!-- This code is to help work with study_tracking -->
+{% block attributes %}
+    data-class-name="{{ class_data.class_name }}"
+{% endblock %}
+
+
 <!-- Content block. -->
 {% block content %}
 
