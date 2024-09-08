@@ -13,7 +13,7 @@
     <script src="https://unpkg.com/feather-icons"></script>
     <title>ScoreSurge</title>
 </head>
-<body>
+<body {% block attributes %}{% endblock %}>
     <div class="header">
         <!-- Splitting the header in 2, elements to co-exist on different sides -->
 
@@ -69,8 +69,8 @@
     <!-- Side bar html -->
     <div class="sidenav">
         <a href="/home">Home</a>
-        <a href="#">TimeTable</a>
-        <a href="#">Study Tracker</a>
+        <a href="{{ url_for('timetable') }}">TimeTable</a>
+        <a href="{{ url_for('study_tracker') }}">Study Tracker</a>
         <a href="{{ url_for('grades') }}">Grades</a>
 
         <!-- Allows for the dropdown to be active in notes.html and classes.html -->
