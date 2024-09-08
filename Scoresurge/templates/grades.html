@@ -32,6 +32,7 @@
 
                 <label for="grade-change-semester-2">Semester 2:</label>
                 <select name="new_grade_semester_2_{{ item.id }}" id="grade-change-semester-2" name="new_grade">
+                    <!-- For the select -->
                     {% for grade in grade_options %}
                         <label for="grade-change">semester 1</label>
                         <option value="{{ grade }}" {% if item.grade_semester_2 == grade %}selected{% endif %}>
@@ -67,8 +68,20 @@
             {% for item in grades %}
                 <tr>
                     <td> {{ item.class_name }}</td>
-                    <td> {{ item.grade_semester_1 }}</td> 
-                    <td> {{ item.grade_semester_2 }}</td> 
+                    {% if item.grade_semester_1 in ["A", "B", "C"] %}
+                        <td id="good-grade"> {{ item.grade_semester_1 }}</td> 
+                    {% else %}
+                        <td id="bad-grade"> {{ item.grade_semester_1 }}</td> 
+                    {% endif %}
+
+                    {% if item.grade_semester_2 in ["A", "B", "C"] %}
+                        <td id="good-grade"> {{ item.grade_semester_2 }}</td> 
+                    {% else %}
+                        <td id="bad-grade"> {{ item.grade_semester_2 }}</td> 
+                    {% endif %}
+
+                    <!-- <td> {{ item.grade_semester_1 }}</td> 
+                    <td> {{ item.grade_semester_2 }}</td>  -->
                 </tr>
             {% endfor %}
         </tbody>

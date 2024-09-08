@@ -28,3 +28,11 @@ table {
     border: 1px solid black;
     border-radius: 5px;
 }
+
+#good-grade {
+    color: green;
+}
+
+#bad-grade {
+    color: red;
+}
