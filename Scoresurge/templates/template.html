@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+<!-- Importing different css files -->
+{% block styles %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/FILL_THIS.css') }}">
+
+{% endblock %}
+
+<!-- Adding attributes to pass into javascript -->
+{% block attributes %}{% endblock %}
+
+<!-- Modal block -->
+{% block more_modals %}
+
+{% endblock %}
+
+<!-- Content block -->
+{% block content %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/FILL_THIS.js') }}"></script>
+{% endblock %}
+
