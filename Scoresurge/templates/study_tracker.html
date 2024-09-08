@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+<!-- Importing different css files -->
+{% block styles %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/study_tracker.css') }}">
+
+{% endblock %}
+
+<!-- Adding attributes to pass into javascript -->
+{% block attributes %}{% endblock %}
+
+<!-- Modal block -->
+{% block more_modals %}
+
+{% endblock %}
+
+<!-- Content block -->
+{% block content %}
+    <p>total: {{ total_time | round(2)}}</p>
+    {% for item in study_tracker %}
+        
+        {% if item.class_name != "null" %}
+            <p>{{ item.class_name }} {{ item.date }}: {{ item.time_spent_date | round(2)}}</p>
+        {% else %}
+            <!-- This is outside class activity like grades, study tracker, etc.. -->
+            <p>Outside activity: {{ item.time_spent_date | round(2)}}</p>
+            
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/study_tracker.js') }}"></script>
+{% endblock %}
