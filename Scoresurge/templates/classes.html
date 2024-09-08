@@ -10,7 +10,10 @@
 <!-- Making the notes dropdown active -->
 {% block class_active %}active{% endblock %}
 
-
+<!-- This code is to help work with study_tracking -->
+{% block attributes %}
+    data-class-name="{{ class_data.class_name }}"
+{% endblock %}
 
 {% block more_modals %}
 
@@ -117,13 +120,37 @@
             <p>{{ class_data.class_room }}</p>
         </div>
 
-        <div class="grades">
+        {% for grade in grades_data %}
+            {% if grade.grade_semester_1 %}
+
+            <div class="grades">
             <img src="{{ url_for('static', filename='icons/award.svg') }}"/>
-            <p>A</p>
-        </div>
+
+            {% if grade.grade_semester_1 in ["A", "B", "C"] %}
+                    <p> Semester 1: <b id="good-grade">{{ grade.grade_semester_1 }}</b></p>
+                {% else %}
+                    <p> Semester 1: <b id="bad-grade">{{ grade.grade_semester_1 }}</b></p>
+            {% endif %}
+            </div>
+        {% endif %}
+
+
+            {% if grade.grade_semester_2 %}
+
+                <div class="grades">
+                <img src="{{ url_for('static', filename='icons/award.svg') }}"/>
+
+                {% if grade.grade_semester_2 in ["A", "B", "C"] %}
+                        <p> Semester 2: <b id="good-grade">{{ grade.grade_semester_2 }}</b></p>
+                    {% else %}
+                        <p> Semester 2: <b id="bad-grade">{{ grade.grade_semester_2 }}</b></p>
+                {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 
-
+    <div>
     {% if schedule | length < 1 %}
         <p>You don't have a planner, would you like to make one?</p>
 
@@ -145,7 +172,7 @@
                         {% if fake_break[0] != True %}
 
                             {% if item.day_of_week != None and item.day_of_week != first_period[0] %}
-                                <th>{{ item.day_of_week }}</th>
+                                <th>{{ item.day_of_week }} {{ item.period }}</th>
                             {% else %}
                                 {% set _ = fake_break.append(True) %}
                             {% endif %}
@@ -162,48 +189,19 @@
             <tbody>
                 {% for week_number, class_schedule in grouped_schedule.items() %}
                     <tr>
-                    <td id="week-row">Week {{ week_number }}</td> 
-
-
-                    {% for week_class in class_schedule %}
-                        <td>
-                            <p id="lesson-header">{{ week_class.content_title }}</p>
-
-                            <p>{{ week_class.content|safe if week_class else '' }}</p>
-                        </td>
-                    {% endfor %}
+                        <td id="week-row">Week {{ week_number }}</td> 
+                        {% for week_class in class_schedule %}
+                            <td>
+                                <p id="lesson-header">{{ week_class.content_title }}</p>
+                                <p>{{ week_class.content|safe if week_class else '' }}</p>
+                            </td>
+                        {% endfor %}
                     </tr>
                 {% endfor %}
-
-                    <!--
-                    <td>
-                        <p id="lesson-header">Jacaranda Exercise 12.3: Measures of spread</p><br>
-                        •	Central tendency ppt and have students do calculations<br>
-                        •	PPT The effects of outliers<br>
-                        •	Discuss measures of spread<br>
-                        •	Calculate range and IQR <br>
-                        •	Worked example 5, 8 (see teacher notes)<br>
-                        
-                        <br>
-                        Jacaranda Ex12.3:<br>
-                        Questions:<br><br>
-                        
-                        SF: Q2a-d, Q3, Q9a-b, Q10  <br>
-                        
-                        CU: Q13<br><br>
-                        Lesson notes: 1. Measures of spread - IQR and range (J12.3)
-                        
-                        
-                        
-                    </td>
-                    <td id="revision-assessment">Revision Time</td>
-                    
-                    <td id="no-class">Sports Carnival</td> -->
-
             </tbody>
-            
         </table>
-    {% endif %} 
+        {% endif %} 
+    </div>
     
     <br>
     {% if schedule | length < 1 %}
