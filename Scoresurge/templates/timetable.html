@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+<!-- Importing different css files -->
+{% block styles %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/timetable.css') }}">
+
+{% endblock %}
+
+<!-- Adding attributes to pass into javascript -->
+{% block attributes %}{% endblock %}
+
+<!-- Modal block -->
+{% block more_modals %}
+
+{% endblock %}
+
+<!-- Content block -->
+{% block content %}
+    <h1>Today's Timetable ({{ day_of_week }})</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Period</th>
+                <th>Class Name</th>
+                <th>Content Title</th>
+                <th>Period Type</th>
+                <th>Content</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for period, entries in timetable.items() %}
+                {% if period %}
+                    <tr>
+                        <td style="background-color: #f0f0f0;">
+                            <strong>Period: {{ period }}</strong>
+                        </td>
+                    {% for entry in entries %}
+                        <td>{{ entry.class_name }}</td>
+                        <td>{{ entry.content_title }}</td>
+                        <td>{{ entry.period_type }}</td>
+                        <td>{{ entry.content|safe }}</td>
+                    </tr>
+                    {{ entry }} period: {{period}}<br><br>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/timetable.js') }}"></script>
+{% endblock %}
