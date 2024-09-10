@@ -16,8 +16,8 @@ body {
     margin: none;
     width: 100%;
     align-items: center;
-    height: 5%;
-    background-color: black;
+    height: 75px;
+    background-color: #3FA34D;
     color: white;
     position: fixed;
 }
@@ -63,15 +63,14 @@ body {
 }
 
 /* -=-=-=-=-=-=-=- */
-
-
 /* Side nav section */
 .sidenav {
     position: fixed;
-    top: 5%;
+    top: 75px;
     height: 100%;
     width: 15%;
-    background-color: bisque;
+    background-color: #E7ECEF;
+    border-right: 1px solid #272932;
 
     display: flex;
     flex-direction: column;
@@ -87,14 +86,14 @@ body {
     font-size: 18px;
     
     
-    background-color: #f1f1f1; 
+    background-color: #E7ECEF; 
     color: black; 
     
     padding: 0; 
     margin: 0; 
     
     text-decoration: none; 
-    border-bottom: 1px solid #ccc; 
+    border-bottom: 1px solid #c7cace; 
 }
 
 /* don't touch, it works */
@@ -259,5 +258,5 @@ body {
 .content {
     margin-left: 15%; /* Adjusts content to the right of the sidebar */
     padding: 20px;
-    padding-top: 50px;
+    padding-top: 75px;
 }
