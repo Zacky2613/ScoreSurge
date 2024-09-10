@@ -20,6 +20,7 @@
 .period-information .period-content {
     border: 1px solid grey;
     border-radius: 5px;
+    padding: 5px;
 }
 
 .period-section #period-info-title {

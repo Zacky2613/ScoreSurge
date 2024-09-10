@@ -52,11 +52,12 @@
                     {% if fake_break[0] != True %}
 
                         {% if item.day_of_week != None and item.day_of_week != first_period[0] %}
-                            <br><p id="period-info-title"> Infomation for {{ item.day_of_week }}: </p>
+                            <br><p id="period-info-title"> Infomation for {{ item.day_of_week }} {{ item.period }}: </p>
                     
                             <div class="period-information">
                                 <!-- This is to parse into the backend -->
                                 <input type="hidden" name="day_of_week[]" value="{{ item.day_of_week }}">
+                                <input type="hidden" name="period[]" value="{{ item.period }}">
                                 
                                 <label for="period-header-{{ loop.index }}">Period Title (e.g: Polynomials, Persauive Devices): </label>
                                 <input type="text" id="period-header-{{ loop.index }}" name="period-header[]" autocomplete="off" required><br>
