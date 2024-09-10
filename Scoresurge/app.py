@@ -20,6 +20,8 @@ api = Api(app)
 class Study_Tracker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     time_spent_total = db.Column(db.Integer)
+    time_spent_class = db.Column(db.Integer)
+    
     time_spent_date = db.Column(db.Integer)
     class_name = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(20), nullable=False)
@@ -127,6 +129,22 @@ def study_tracker():
         total_time=total_time
     )
 
+@app.template_filter('format_time')
+def format_time(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+    
+    returnable_time = []
+    if (hours > 0):
+        returnable_time.append(f"{int(hours)}h")
+    if (minutes > 0):
+        returnable_time.append(f"{int(minutes)}m")
+    if (seconds > 0 or not returnable_time):
+        returnable_time.append(f"{int(seconds)}s")
+        
+    return " ".join(returnable_time)
+
 # Note updating
 @app.route("/notes/<string:page_id>", methods=["POST", "GET"])
 def notes(page_id):
@@ -159,7 +177,6 @@ def notes(page_id):
 def timetable():
     now = datetime.now()
     # day_of_week_today = now.strftime("%A")
-    
     day_of_week_today = "Monday"
 
     # Fetch today's schedules from the database
@@ -190,10 +207,11 @@ def track_time():
     
     # The data sent from the javascript in js/base.js
     time_spent_seconds = round(int(request.form.get("time_spent", 0)) / 1000, 2)
+    # time_spent_seconds = 100000000
     date = request.form.get("time_date")
     class_name = request.form.get("class_name")
-    
-    # If this entry is for a class or not
+
+    # If this entry is for a class/note or not
     if class_name:
         study_tracker_data = Study_Tracker.query.filter_by(class_name=class_name, date=date).first()
     else:
@@ -202,6 +220,7 @@ def track_time():
     # If the record already exists
     if study_tracker_data:
         study_tracker_data.time_spent_total += time_spent_seconds
+        study_tracker_data.time_spent_class += time_spent_seconds
         study_tracker_data.time_spent_date += time_spent_seconds
         
         db.session.commit()
@@ -212,6 +231,7 @@ def track_time():
         time_track = Study_Tracker(
             class_name = class_name,
             time_spent_date = time_spent_seconds,
+            time_spent_class = time_spent_seconds,
             time_spent_total = time_spent_seconds,
             date=date
         )
@@ -251,6 +271,7 @@ def add_to_class_planner(page_id):
     
     week_number = request.form["week_number"]
     day_of_weeks = request.form.getlist("day_of_week[]")
+    periods = request.form.getlist("period[]")
     period_headers = request.form.getlist("period-header[]")
     period_contents = request.form.getlist("content[]")
     
@@ -265,12 +286,14 @@ def add_to_class_planner(page_id):
         header = period_headers[i]
         content = period_contents[i]
         day_of_week = day_of_weeks[i]
+        period = periods[i]
 
         
         new_week_entry = Schedule(
             class_name=class_data.class_name, 
             week_number=week_number,
             day_of_week=day_of_week,
+            period=period,
             content_title=header,
             content=content,
         )
