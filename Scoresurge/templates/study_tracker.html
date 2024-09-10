@@ -17,17 +17,61 @@
 
 <!-- Content block -->
 {% block content %}
-    <p>total: {{ total_time | round(2)}}</p>
-    {% for item in study_tracker %}
+
+    <div class="study-tracker-header">
+        <h1>Study Tracker</h1>
+        <p>Study Tracker tracks how much time you use the website and where! <br><br>
+            You can see the totals of each topic through the dropdown header. <br>
+            If you want more detail and a breakdown, click on the dropdown to see exactly how much time on which days you studied/used the website for! <br><br><br>
+
+        </p>
+    </div>
+
+    <div class="study-tracking">
+
+        {% set displayed_classes = [] %}
+        {% for item in study_tracker %}
+            {% if item.class_name != "null" and item.class_name not in displayed_classes %}
+                {% set _ = displayed_classes.append(item.class_name) %}
+
+                <div class="study-tracker-dropdown">
+
+                    <a href="#" class="study-tracker-dropdown-toggle">
+                        <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>
         
-        {% if item.class_name != "null" %}
-            <p>{{ item.class_name }} {{ item.date }}: {{ item.time_spent_date | round(2)}}</p>
-        {% else %}
-            <!-- This is outside class activity like grades, study tracker, etc.. -->
-            <p>Outside activity: {{ item.time_spent_date | round(2)}}</p>
-            
-        {% endif %}
-    {% endfor %}
+                        <p id="study-tracker-header">{{ item.class_name }} | Total: {{ item.time_spent_class | format_time }}</p>
+                    </a>
+        
+        
+                    <div class="study-tracker-content">
+                        {% for entry in study_tracker if entry.class_name == item.class_name %}
+                            <p id="study-date">{{ entry.date }}: {{ entry.time_spent_date | format_time }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            {% else %}
+                <div class="study-tracker-dropdown">
+
+                    <a href="#" class="study-tracker-dropdown-toggle">
+                        <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>
+        
+                        <p id="study-tracker-header">Outside Activity | Total: {{ item.time_spent_class | format_time }}</p>
+        
+                    </a>
+                    <div class="study-tracker-content">
+                        
+                        {% for entry in study_tracker if entry.class_name == item.class_name %}
+                            <p>{{ entry.date }}: {{ entry.time_spent_date | format_time }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
 {% endblock %}
 
 {% block scripts %}

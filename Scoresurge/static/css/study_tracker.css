@@ -1,0 +1,103 @@
+
+
+h1 {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+
+.study-tracker-dropdown,
+.study-tracker-dropdown .sidenav a {
+    flex: 0 0 5%; 
+    text-align: center;
+    line-height: 8vh; 
+
+    font-size: 18px;
+    
+    
+    border: 2px solid rgb(173, 173, 173);
+    border-radius: 10px;
+    color: black; 
+    
+    width: 50%;
+    padding: 0; 
+    margin: 0;
+    margin-bottom: 40px;
+    
+    text-decoration: none;
+}
+
+
+/* Dropdown Arrow css: */
+.study-tracker-dropdown img {
+    background: url("../icons/chevron-right.svg");
+    background-size: contain;
+
+    width: 16px;
+    height: 16px;
+
+
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+
+.study-tracker-dropdown-toggle {
+    text-decoration: none;
+    color: black;
+    
+    display: flex;
+    
+    align-items: center;
+    justify-content: space-between; 
+    
+    /* These !importants feel weird now */
+    padding-left: 40px !important;
+    padding-right: 20px !important;
+    
+    cursor: pointer;
+    
+    border: none !important;
+    position: relative;
+}
+
+.study-tracker-dropdown.active .study-tracker-dropdown-toggle img {
+    transform: rotate(90deg); 
+}
+
+.study-tracker-dropdown .study-tracker-dropdown-toggle::after {
+    content: '';
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+    /* Have width 0 for transition */
+    width: 0; 
+    border-bottom: 2px solid rgb(173, 173, 173);
+
+    transition: width 0.3s ease; 
+}
+
+
+.study-tracker-dropdown.active .study-tracker-dropdown-toggle::after {
+    width: 25%;
+}
+
+/* don't touch, it works */
+.study-tracker-content {
+    display: flex;
+    flex-direction: column;
+    
+    text-align: left;
+
+    max-height: 0; 
+    overflow: hidden;
+
+    padding-left: 10px;
+    transition: max-height 0.3s ease; 
+}
+
+#study-tracker-header {
+    margin-left: 15px !important;
+    text-align: left;
+    flex-grow: 1;
+}
