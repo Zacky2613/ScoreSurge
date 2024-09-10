@@ -17,37 +17,39 @@
 
 <!-- Content block -->
 {% block content %}
-    <h1>Today's Timetable ({{ day_of_week }})</h1>
+    <!-- Making sure the day they're viewing isn't a weekend day -->
+    {% if day_of_week not in ["Saturday", "Sunday"]  %}
+        <h1>Today's Timetable ({{ day_of_week }})</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Period</th>
-                <th>Class Name</th>
-                <th>Content Title</th>
-                <th>Period Type</th>
-                <th>Content</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for period, entries in timetable.items() %}
-                {% if period %}
-                    <tr>
-                        <td style="background-color: #f0f0f0;">
-                            <strong>Period: {{ period }}</strong>
-                        </td>
-                    {% for entry in entries %}
-                        <td>{{ entry.class_name }}</td>
-                        <td>{{ entry.content_title }}</td>
-                        <td>{{ entry.period_type }}</td>
-                        <td>{{ entry.content|safe }}</td>
-                    </tr>
-                    {{ entry }} period: {{period}}<br><br>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Class Name</th>
+                    <th>Lesson Topic</th>
+                    <th>Lesson Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for period, entries in timetable.items() %}
+                    {% if period %}
+                        <tr>
+                            <td style="background-color: #f0f0f0;">
+                                <strong>Period: {{ period }}</strong>
+                            </td>
+                        {% for entry in entries %}
+                            <td>{{ entry.class_name }}</td>
+                            <td>{{ entry.content_title }}</td>
+                            <td>{{ entry.content|safe }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h1>It's {{ day_of_week }}! You don't have any classes today!</h1>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
