@@ -7,6 +7,7 @@
 
 {% endblock %}
 
+
 <!-- Adding attributes to pass into javascript -->
 {% block attributes %}{% endblock %}
 
@@ -32,7 +33,7 @@
             </thead>
             <tbody>
                 {% for period, entries in timetable.items() %}
-                    {% if period %}
+                    {% if period and holiday == "off" %}
                         <tr>
                             <td style="background-color: #f0f0f0;">
                                 <strong>Period: {{ period }}</strong>
