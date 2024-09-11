@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort
+from flask_restful import Resource, Api
 from flask_migrate import Migrate
 from datetime import datetime
 
@@ -67,7 +67,7 @@ class Schedule(db.Model):
     class_name = db.Column(db.Text)
     
     content_title = db.Column(db.String(60))
-    period_type = db.Column(db.String(40))
+    holiday = db.Column(db.String(40))
     content = db.Column(db.Text)
 
     
@@ -86,8 +86,9 @@ def home():
 def classes(page_id):
     class_name = page_id.replace("_", " ").title()
     class_data = Classes.query.filter_by(class_name=class_name).first()
-    schedule_data = Schedule.query.filter_by(class_name=class_data.class_name).all()
+    schedule_data = Schedule.query.filter_by(class_name=class_data.class_name).order_by(Schedule.week_number).all()
     grades_data = Grades.query.filter_by(class_name=class_data.class_name)
+    study_tracker = Study_Tracker.query.filter_by(class_name=class_data.class_name, date="9/11/2024").first()
     
     grouped_schedule = {}
     for schedule in schedule_data:
@@ -106,6 +107,7 @@ def classes(page_id):
         schedule=schedule_data,
         grouped_schedule=grouped_schedule,
         grades_data=grades_data,
+        study_tracker_data=study_tracker,
         page_id=page_id
     )
 
@@ -123,9 +125,16 @@ def study_tracker():
     study_tracker_data = Study_Tracker.query.all()
     total_time = db.session.query(db.func.sum(Study_Tracker.time_spent_total)).scalar()
     
+    grouped_class_data = db.session.query(
+        Study_Tracker.class_name,
+        db.func.sum(Study_Tracker.time_spent_class).label('total_time_class')
+    ).group_by(Study_Tracker.class_name).all()
+
+    
     return render_template(
         "study_tracker.html",
         study_tracker=study_tracker_data,
+        grouped_class_data=grouped_class_data,
         total_time=total_time
     )
 
@@ -142,8 +151,37 @@ def format_time(seconds):
         returnable_time.append(f"{int(minutes)}m")
     if (seconds > 0 or not returnable_time):
         returnable_time.append(f"{int(seconds)}s")
-        
+
     return " ".join(returnable_time)
+
+# This is for assinging icons to classes
+@app.template_filter("assign_class_icon")
+def assign_class_icon(class_name):
+    class_names_to_icons_set = {
+        "english": "book.svg",
+        "literature": "book.svg",
+        
+        "math": "pie-chart.svg",
+        "calculus": "pie-chart.svg",
+        
+        "computer science": "terminal.svg",
+        "digital": "terminal.svg",
+        
+        "science": "aperture.svg",
+        "biology": "aperture.svg",
+        "chemistry": "aperture.svg",
+        "physics": "aperture.svg",
+        
+        "economics": "dollar-sign.svg",
+        "accounting": "dollar-sign.svg"
+    }
+    
+    if (class_name.lower() in class_names_to_icons_set):
+        # return "{{ url_for('static', filename='icons/" + class_names_to_icons_set[class_name.lower()] + "') }}"
+        return f"/static/icons/{class_names_to_icons_set[class_name.lower()]}"
+    else:
+        return f"{{ url_for('static', filename='icons/zap.svg') }}"
+
 
 # Note updating
 @app.route("/notes/<string:page_id>", methods=["POST", "GET"])
@@ -180,7 +218,7 @@ def timetable():
     day_of_week_today = "Monday"
 
     # Fetch today's schedules from the database
-    today_schedule = Schedule.query.filter_by(day_of_week=day_of_week_today).all()
+    today_schedule = Schedule.query.filter_by(day_of_week=day_of_week_today, week_number=1).all()
 
 
     timetable_data = {}
@@ -192,7 +230,7 @@ def timetable():
         timetable_data[period].append({
             "class_name": schedule.class_name,
             "content_title": schedule.content_title,
-            "period_type": schedule.period_type,
+            "holiday": schedule.holiday,
             "content": schedule.content
         })
     
@@ -207,7 +245,6 @@ def track_time():
     
     # The data sent from the javascript in js/base.js
     time_spent_seconds = round(int(request.form.get("time_spent", 0)) / 1000, 2)
-    # time_spent_seconds = 100000000
     date = request.form.get("time_date")
     class_name = request.form.get("class_name")
 
@@ -274,6 +311,19 @@ def add_to_class_planner(page_id):
     periods = request.form.getlist("period[]")
     period_headers = request.form.getlist("period-header[]")
     period_contents = request.form.getlist("content[]")
+    holiday_checkboxes = request.form.getlist("holiday-checkbox[]")
+    
+    holiday_checkboxes_result = []
+    # Iterate over the list, excluding the last item to avoid index errors
+    for i in range(len(holiday_checkboxes) - 1):
+        holiday_checkboxes_result.append(holiday_checkboxes[i])
+        
+        # Check if the current item is "off" and the next item is "on"
+        if holiday_checkboxes[i] == "off" and holiday_checkboxes[i + 1] == "on":
+            # Remove the "off" item from the result list
+            holiday_checkboxes_result.pop()
+
+    holiday_checkboxes_result.append(holiday_checkboxes[-1])
     
     # Delete old entries if the user is trying to edit them
     Schedule.query.filter_by(
@@ -287,6 +337,8 @@ def add_to_class_planner(page_id):
         content = period_contents[i]
         day_of_week = day_of_weeks[i]
         period = periods[i]
+        # "on" if ticked, "off" if not
+        holiday = holiday_checkboxes_result[i]
 
         
         new_week_entry = Schedule(
@@ -294,6 +346,7 @@ def add_to_class_planner(page_id):
             week_number=week_number,
             day_of_week=day_of_week,
             period=period,
+            holiday=holiday,
             content_title=header,
             content=content,
         )
@@ -344,6 +397,27 @@ def create_class_planner(page_id):
     return redirect(url_for("classes", page_id=page_id))
 
 
+@app.route("/remove_class", methods=["POST"])
+def remove_class():
+    class_name = request.form.get("class_name")
+    
+    records_to_delete = [
+        Classes.query.filter_by(class_name=class_name).all(),
+        Notes.query.filter_by(note_name=class_name).all(),
+        Schedule.query.filter_by(class_name=class_name).all(),
+        Grades.query.filter_by(class_name=class_name).all(),
+        
+        Study_Tracker.query.filter_by(class_name=class_name).all()
+    ]
+
+    for record_group in records_to_delete:
+        for entry in record_group:
+            db.session.delete(entry)
+    
+    db.session.commit()  # Commit changes to the database
+
+    return redirect(url_for("home"))
+
 
 @app.route("/create_note_and_class", methods=["POST"])
 def create_class():
@@ -391,6 +465,9 @@ def create_class():
         db.session.commit()
         
     return redirect(url_for("classes", page_id=page_id))
+
+
+
 
 
 
