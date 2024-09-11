@@ -9,6 +9,11 @@
 
     {% block styles %}{% endblock %}
 
+    <!-- Google Font import: -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
     <!-- Importing icons -->
     <script src="https://unpkg.com/feather-icons"></script>
     <title>ScoreSurge</title>
@@ -24,7 +29,6 @@
         </div>
 
         <div class="header-right">
-            <!-- TODO: LOGIN NAME SYSTEM HERE: -->
             <p>{{ username }}</p>
             <button type="button" id="settings-btn"><img id="settings-icon" src="{{ url_for('static', filename='icons/settings.svg') }}"></button>
         </div>
@@ -55,10 +59,14 @@
                 <label for="grade-semester-2">Grade Semester 2: </label>
                 <input type="text" id="grade-semester-2" name="grade_semester_2" autocomplete="off"><br>
 
-                <button type="submit">Add Class</button>
+                <br><button type="submit" class="add-class-button">
+                    <img src="{{ url_for('static', filename='icons/folder-plus.svg') }}" alt="">
+                    Add Class
+                </button>
             </form>
         </div>
     </div>
+
 
     <!-- Planner Week Adding: -->
 
@@ -95,8 +103,15 @@
                     {% for class in classes %}
 
                         <a href="{{ url_for('classes', page_id=class.page_id) }}">
-                            <img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">
-                            {{ class.class_name }}
+                            <img id="class-icon" src="{{ class.class_name | assign_class_icon }}">
+
+                            <!-- {{ class.class_name }} -->
+                            <p id="class-header">{{ class.class_name }}</p>
+
+                            <form action="{{ url_for('remove_class') }}" method="post">
+                                <input type="hidden" name="class_name" value="{{ class.class_name }}">
+                                <button type="submit" id="remove-class-button" class="remove-class-btn"></button>
+                            </form>
                         </a>
 
                     {% endfor %}
@@ -123,8 +138,8 @@
                     {% for note in notes %}
 
                         <a href="{{ url_for('notes', page_id=note.page_id) }}">
-                            <img id="class-icon" src="{{ url_for('static', filename='icons/zap.svg') }}">
-                            {{ note.note_name }}
+                            <img id="class-icon" src="{{ note.note_name | assign_class_icon }}">
+                            <p id="class-header">{{ note.note_name }}</p>
                         </a>
 
                     {% endfor %}
