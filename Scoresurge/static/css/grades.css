@@ -1,6 +1,32 @@
 
+/* MODAL EDIT_GRADES CSS */
+
+.class-grades {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 5px;
+}
+
+#grades-class-header {
+    font-weight: 500;
+}
+
+#grade-changer {
+    font-weight: 700;
+    width: 50px;
+    padding: 3px;
+    margin-bottom: 5px;
+}
+
+#grade-changer:hover {
+    outline: none;
+}
 
 
+
+/* =-=-=--==-=-=-=-=-=-=- */
+/* TABLE AND OTHER CSS */
 table, tr, th, td, caption {
     border: 1px solid;
 }
@@ -24,8 +50,8 @@ table {
 }
 
 .edit-grades-btn:hover {
-    background-color: rgb(218, 218, 218);
-    border: 1px solid black;
+    background-color: rgb(231, 231, 231);
+    /* border: 1px solid black; */
     border-radius: 5px;
 }
 

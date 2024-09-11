@@ -18,31 +18,36 @@
 
             {% set grade_options = ["A", "B", "C", "D", "E", ""] %}
             {% for item in grades %}
-                <p>{{ item.class_name }}</p>
 
-                <label for="grade-change-semester-1">Semester 1: </label>
-                <select name="new_grade_semester_1_{{ item.id }}" id="grade-change-semester-1" name="new_grade">
-                    {% for grade in grade_options %}
-                        <label for="grade-change">semester 1</label>
-                        <option value="{{ grade }}" {% if item.grade_semester_1 == grade %}selected{% endif %}>
-                            {{ grade if grade != "" else "None" }}
-                        </option>
-                    {% endfor %}
-                </select><br>
+                <p id="grades-class-header">{{ item.class_name }}:</p>
 
-                <label for="grade-change-semester-2">Semester 2:</label>
-                <select name="new_grade_semester_2_{{ item.id }}" id="grade-change-semester-2" name="new_grade">
-                    <!-- For the select -->
-                    {% for grade in grade_options %}
-                        <label for="grade-change">semester 1</label>
-                        <option value="{{ grade }}" {% if item.grade_semester_2 == grade %}selected{% endif %}>
-                            {{ grade if grade != "" else "None" }}
-                        </option>
-                    {% endfor %}
-                </select><br>
+                <div class="class-grades">
+                    <label for="grade-change-semester-1">Semester 1: </label>
+                    <select name="new_grade_semester_1_{{ item.id }}" id="grade-changer" name="new_grade">
+                        {% for grade in grade_options %}
+                            <label for="grade-change">semester 1</label>
+                            <option value="{{ grade }}" {% if item.grade_semester_1 == grade %}selected{% endif %}>
+                                {{ grade if grade != "" else "None" }}
+                            </option>
+                        {% endfor %}
+                    </select><br>
+    
+                    <label for="grade-change-semester-2">Semester 2:</label>
+                    <select name="new_grade_semester_2_{{ item.id }}" id="grade-changer" name="new_grade">
+                        <!-- For the select -->
+                        {% for grade in grade_options %}
+                            <label for="grade-change">semester 1</label>
+                            <option value="{{ grade }}" {% if item.grade_semester_2 == grade %}selected{% endif %}>
+                                {{ grade if grade != "" else "None" }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
             {% endfor %}
-
-            <button type="submit">Edit Grades</button>
+            <button type="submit" class="edit-grades-btn">
+                <img src="{{ url_for('static', filename='icons/check-square.svg') }}">
+            </button>
+        
         </form>
     </div>
 </div>
