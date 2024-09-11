@@ -10,8 +10,8 @@ h1 {
 .study-tracker-dropdown .sidenav a {
     flex: 0 0 5%; 
     text-align: center;
-    line-height: 8vh; 
-
+    line-height: 7vh; 
+    
     font-size: 18px;
     
     
@@ -26,7 +26,6 @@ h1 {
     
     text-decoration: none;
 }
-
 
 /* Dropdown Arrow css: */
 .study-tracker-dropdown img {
@@ -100,4 +99,8 @@ h1 {
     margin-left: 15px !important;
     text-align: left;
     flex-grow: 1;
+}
+
+#study-date {
+    line-height: 5vh;
 }

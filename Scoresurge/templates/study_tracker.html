@@ -29,8 +29,10 @@
 
     <div class="study-tracking">
 
+
         {% set displayed_classes = [] %}
-        {% for item in study_tracker %}
+        {% for item in grouped_class_data %}
+
             {% if item.class_name != "null" and item.class_name not in displayed_classes %}
                 {% set _ = displayed_classes.append(item.class_name) %}
 
@@ -39,7 +41,7 @@
                     <a href="#" class="study-tracker-dropdown-toggle">
                         <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>
         
-                        <p id="study-tracker-header">{{ item.class_name }} | Total: {{ item.time_spent_class | format_time }}</p>
+                        <p id="study-tracker-header">{{ item.class_name }} | Total: {{ item.total_time_class | format_time }}</p>
                     </a>
         
         
@@ -50,22 +52,7 @@
                     </div>
                 </div>
                 
-            {% else %}
-                <div class="study-tracker-dropdown">
 
-                    <a href="#" class="study-tracker-dropdown-toggle">
-                        <img src="{{ url_for('static', filename='icons/chevron-right.svg') }}"/>
-        
-                        <p id="study-tracker-header">Outside Activity | Total: {{ item.time_spent_class | format_time }}</p>
-        
-                    </a>
-                    <div class="study-tracker-content">
-                        
-                        {% for entry in study_tracker if entry.class_name == item.class_name %}
-                            <p>{{ entry.date }}: {{ entry.time_spent_date | format_time }}</p>
-                        {% endfor %}
-                    </div>
-                </div>
                 
             {% endif %}
         {% endfor %}
