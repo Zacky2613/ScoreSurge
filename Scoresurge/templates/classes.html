@@ -24,6 +24,8 @@
 
         <form id="new-class-form" action="{{ url_for('create_class_planner', page_id=page_id) }}" method="post">
 
+
+
             <label for="classes-input">When do you have the class? Please use this format and in order: "Monday P1 | Tuesday P2 | Wednesday P3"</label>
             <input type="text" id="classes-input" name="days_of_week" autocomplete="off">
 
@@ -31,7 +33,6 @@
         </form>
     </div>
 </div>
-
 
 <div id="add-to-planner-modal" class="modal">
     <div class="modal-content">
@@ -47,7 +48,7 @@
             <div class="period-section">
 
                 {% set first_period = [] %}
-                {% set fake_break = [] %}
+                {% set fake_break = [] %} 
                 {% for item in schedule %}
                     {% if fake_break[0] != True %}
 
@@ -55,6 +56,10 @@
                             <br><p id="period-info-title"> Infomation for {{ item.day_of_week }} {{ item.period }}: </p>
                     
                             <div class="period-information">
+                                <input type="hidden" name="holiday-checkbox[]" value="off">
+                                <label for="holiday-checkbox-{{ loop.index }}">Public Holiday: </label>
+                                <input type="checkbox" id="holiday-checkbox-{{ loop.index }}" name="holiday-checkbox[]" class="checkbox"><br>
+
                                 <!-- This is to parse into the backend -->
                                 <input type="hidden" name="day_of_week[]" value="{{ item.day_of_week }}">
                                 <input type="hidden" name="period[]" value="{{ item.period }}">
@@ -90,6 +95,7 @@
         </form>
     </div>
 </div>
+
 {% endblock %}
 
 
@@ -149,6 +155,11 @@
                 </div>
             {% endif %}
         {% endfor %}
+
+        <div class="study-tracker">
+            <img src="{{ url_for('static', filename='icons/clock.svg') }}"/>
+            <p>Today: {{ study_tracker_data.time_spent_date | format_time }}</p>
+        </div>  
     </div>
 
     <div>
@@ -192,7 +203,10 @@
                     <tr>
                         <td id="week-row">Week {{ week_number }}</td> 
                         {% for week_class in class_schedule %}
-                            <td>
+                            <td
+                            {% if week_class.holiday == "on" %}
+                                id="no-class"
+                            {% endif %}>
                                 <p id="lesson-header">{{ week_class.content_title }}</p>
                                 <p>{{ week_class.content|safe if week_class else '' }}</p>
                             </td>

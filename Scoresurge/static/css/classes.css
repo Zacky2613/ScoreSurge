@@ -83,12 +83,9 @@ td:not(#week-row) {
 }
 
 #no-class {
-    background-color: rgb(149, 235, 149);
+    background-color: rgb(206, 206, 206);
 }
 
-#revision-assessment {
-    background-color: bisque;
-}
 
 #lesson-header {
     text-align: center;
@@ -97,7 +94,7 @@ td:not(#week-row) {
 }
 
 #good-grade {
-    color: green;
+    color: rgb(79, 156, 79);
 }
 
 #bad-grade {
