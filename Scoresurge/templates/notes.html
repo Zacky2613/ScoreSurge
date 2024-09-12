@@ -20,6 +20,8 @@
 {% block content %}
 
 <div class="notes-textbox">
+
+    <h1>{{class_data.class_name}} Notes:</h1>
     <form id="note-form" action="{{ url_for('notes', page_id=page_id) }}" method="POST">
 
         <div class="toolbar">
@@ -43,9 +45,6 @@
                     <option value="Times New Roman">Times New Roman</option>
                     <option value="Verdana">Verdana</option>
                 </select>
-                
-                
-                <button type="button" onclick="changeFontSize('increase')">A+</button>
             </div>
 
         </div>
