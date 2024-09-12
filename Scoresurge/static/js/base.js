@@ -10,6 +10,7 @@ var class_modal = document.getElementById("class-modal");
 var add_to_planner_modal = document.getElementById("add-to-planner-modal");
 var planner_modal = document.getElementById("planner-modal");
 var edit_grades_modal = document.getElementById("edit-grades-modal");
+var settings_modal = document.getElementById("settings-modal");
 var modal_close_btn = document.querySelectorAll(".close");
 
 document.querySelectorAll("#add-btn").forEach(button => {
@@ -24,6 +25,8 @@ document.querySelectorAll("#add-btn").forEach(button => {
             planner_modal.style.display = "flex"
         } else if (button.className === "edit-grades-btn") {
             edit_grades_modal.style.display = "flex"        
+        } else if (button.className === "settings-btn") {
+            settings_modal.style.display = "flex"        
         }
 
 
@@ -34,10 +37,11 @@ document.querySelectorAll("#add-btn").forEach(button => {
 // Click X to close the modal
 modal_close_btn.forEach(button => {
     button.addEventListener("click", function(event) {
-        try {class_modal.style.display = "none";} catch (e) {}
-        try {add_to_planner_modal.style.display = "none";} catch (e) {}
+        try { class_modal.style.display = "none";} catch (e) {}
+        try { add_to_planner_modal.style.display = "none";} catch (e) {}
         try { planner_modal.style.display = "none"; } catch (e) {}
         try { edit_grades_modal.style.display = "none"; } catch (e) {}
+        try { settings_modal.style.display = "none"; } catch (e) {}
     });
 });
 

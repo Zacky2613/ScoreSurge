@@ -15,7 +15,6 @@ function formatText(command) {
 }
 
 
-
 const format_button = document.querySelectorAll("#text-format-btn");
 
 format_button.forEach(button => {
@@ -28,13 +27,16 @@ format_button.forEach(button => {
 // If ctrl+s is pressed it'll save.
 document.addEventListener('keydown', function(event) {
     if (event.ctrlKey && event.key === 's') {
-
-        // Preven the broswer save .html thingy
+        // Prevent the broswer save .html thingy
         event.preventDefault();
 
         // Without this, the save is blank (moving the note stuff from div to input field)
         document.getElementById('note-content').value = document.getElementById('editor').innerHTML;
         document.getElementById('note-form').submit(); // Trigger form submission
+    }
+    
+    else if (event.key == "Tab") {
+        // TOOD: GET TAB WORKING
     }
 });
 
