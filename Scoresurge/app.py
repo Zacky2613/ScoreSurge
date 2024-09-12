@@ -17,6 +17,12 @@ migrate = Migrate(app, db)
 # Api
 api = Api(app)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_name = db.Column(db.String(50))
+    student_school = db.Column(db.String(50))
+
+
 class Study_Tracker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     time_spent_total = db.Column(db.Integer)
@@ -50,9 +56,6 @@ class Classes(db.Model):
     page_id = db.Column(db.String(40), nullable=False, unique=True)
     teacher = db.Column(db.String(30))
     class_room = db.Column(db.String(20))
-    
-    # grades = db.Column(db.String(20))
-    # class_room = db.Column(db.String(20))
     
     def __repr__(self) -> str:
         return f"Schedule: {self.content}"
@@ -88,7 +91,7 @@ def classes(page_id):
     class_data = Classes.query.filter_by(class_name=class_name).first()
     schedule_data = Schedule.query.filter_by(class_name=class_data.class_name).order_by(Schedule.week_number).all()
     grades_data = Grades.query.filter_by(class_name=class_data.class_name)
-    study_tracker = Study_Tracker.query.filter_by(class_name=class_data.class_name, date="9/11/2024").first()
+    study_tracker = Study_Tracker.query.filter_by(class_name=class_data.class_name, date="9/12/2024").first()
     
     grouped_schedule = {}
     for schedule in schedule_data:
@@ -140,19 +143,22 @@ def study_tracker():
 
 @app.template_filter('format_time')
 def format_time(seconds):
-    hours = seconds // 3600
-    minutes = (seconds % 3600) // 60
-    seconds = seconds % 60
+    print(seconds)
+    if seconds:
     
-    returnable_time = []
-    if (hours > 0):
-        returnable_time.append(f"{int(hours)}h")
-    if (minutes > 0):
-        returnable_time.append(f"{int(minutes)}m")
-    if (seconds > 0 or not returnable_time):
-        returnable_time.append(f"{int(seconds)}s")
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+        
+        returnable_time = []
+        if (hours > 0):
+            returnable_time.append(f"{int(hours)}h")
+        if (minutes > 0):
+            returnable_time.append(f"{int(minutes)}m")
+        if (seconds > 0 or not returnable_time):
+            returnable_time.append(f"{int(seconds)}s")
 
-    return " ".join(returnable_time)
+        return " ".join(returnable_time)
 
 # This is for assinging icons to classes
 @app.template_filter("assign_class_icon")
@@ -166,6 +172,7 @@ def assign_class_icon(class_name):
         
         "computer science": "terminal.svg",
         "digital": "terminal.svg",
+        "digital technologies": "terminal.svg",
         
         "science": "aperture.svg",
         "biology": "aperture.svg",
@@ -181,7 +188,6 @@ def assign_class_icon(class_name):
         return f"/static/icons/{class_names_to_icons_set[class_name.lower()]}"
     else:
         return f"{{ url_for('static', filename='icons/zap.svg') }}"
-
 
 # Note updating
 @app.route("/notes/<string:page_id>", methods=["POST", "GET"])
@@ -218,7 +224,7 @@ def timetable():
     day_of_week_today = "Monday"
 
     # Fetch today's schedules from the database
-    today_schedule = Schedule.query.filter_by(day_of_week=day_of_week_today, week_number=1).all()
+    today_schedule = Schedule.query.filter_by(day_of_week=day_of_week_today, week_number=1).order_by(Schedule.period).all()
 
 
     timetable_data = {}
@@ -259,6 +265,7 @@ def track_time():
         study_tracker_data.time_spent_total += time_spent_seconds
         study_tracker_data.time_spent_class += time_spent_seconds
         study_tracker_data.time_spent_date += time_spent_seconds
+        
         
         db.session.commit()
         message = "Time updated successfully"
@@ -356,17 +363,6 @@ def add_to_class_planner(page_id):
         
     
     return redirect(url_for("classes", page_id=page_id))
-
-@app.route("/debug_schedule_data")
-def debug_schedule_data():
-    # Fetch all schedule data
-    all_schedules = Schedule.query.all()
-    
-    # Print all entries
-    for schedule in all_schedules:
-        print(f"Week Number: {schedule.week_number}, Day of Week: {schedule.day_of_week}, Title: {schedule.content_title}, Content: {schedule.content}")
-    
-    return "Check your console for the debug output.", 200
 
 
 @app.route("/create_class_planner/<string:page_id>", methods=["POST"])
@@ -466,9 +462,20 @@ def create_class():
         
     return redirect(url_for("classes", page_id=page_id))
 
+@app.route("/update_user", methods=["POST"])
+def update_user():
+    student_data = User.query.filter_by(id=1).first()
+    
+    updated_name = request.form["student_name"]
+    updated_school = request.form["student_school"]
+    
 
-
-
+    student_data.student_name = updated_name
+    student_data.student_school = updated_school
+    
+    db.session.commit()
+    
+    return redirect("home")
 
 
 @app.context_processor
@@ -476,12 +483,13 @@ def inject_data():
     notes = Notes.query.all()
     classes = Classes.query.all() 
     schedule = Schedule.query.all() 
+    student = User.query.filter_by(id=1).first() 
 
     data = {
         "notes": notes,
         "classes": classes,
         "schedule": schedule,
-        "username": "John Doe"
+        "student": student
     }
     
     return data
