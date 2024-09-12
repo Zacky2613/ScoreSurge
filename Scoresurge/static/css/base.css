@@ -6,12 +6,17 @@ body {
     font-family: "Roboto", sans-serif; 
 }
 
-
-
+/* Hiding the scroll bar visually */
 body::-webkit-scrollbar {
     display: none;
 }
 
+
+@media (prefers-color-scheme: dark) {
+    #favicon {
+        content: url('../icons/book.svg')
+    }
+}
 
 /* Handling header information */
 .header {
@@ -37,11 +42,15 @@ body::-webkit-scrollbar {
 .header-right {
     justify-content: right;
     text-align: right;
-    align-items: right;
+    align-items: center;
 
-    padding-right: 50px;
+    padding-right: 100px;
 }
 
+
+#student-name-and-school {
+    margin-right: 20px;
+}
 
 .header p {
     margin: 0;
@@ -52,12 +61,12 @@ body::-webkit-scrollbar {
     font-size: 24px;
 }
 
-#settings-btn,
+.settings-btn,
 #menu-btn {
-    background-color: none;
-    background: none;
-    border: none;
-    cursor: pointer;
+    background-color: none ;
+    background: none ;
+    border: none ;
+    cursor: pointer ;
     padding-right: 20px;
     padding-left: 20px;
 }
@@ -305,7 +314,7 @@ body::-webkit-scrollbar {
 .content {
     margin-left: 15%; /* Adjusts content to the right of the sidebar */
     padding: 20px;
-    padding-top: 75px;
+    padding-top: 100px;
 }
 
 .add-class-button {
