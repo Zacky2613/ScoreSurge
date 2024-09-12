@@ -1,8 +1,10 @@
 
 
-.notes-textbox {
-    padding: 10px;
+h1 {
+    margin: 0;
+    font-size: 22px;
 }
+
 
 
 /* TOOLBAR SECTION */
@@ -85,6 +87,8 @@
     font-size: 16px;
     line-height: 1.5;
     color: black; 
+
+    /* white-space: pre-wrap;  */
 
     /* Allows the editor to be change horz. and vert. */
     resize: both;
