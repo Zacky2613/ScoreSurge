@@ -207,7 +207,7 @@
                             {% if week_class.holiday == "on" %}
                                 id="no-class"
                             {% endif %}>
-                                <p id="lesson-header">{{ week_class.content_title }}</p>
+                                <p id="lesson-header">{{ week_class.content_title }}</p><br>
                                 <p>{{ week_class.content|safe if week_class else '' }}</p>
                             </td>
                         {% endfor %}

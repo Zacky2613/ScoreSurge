@@ -33,7 +33,7 @@
             </thead>
             <tbody>
                 {% for period, entries in timetable.items() %}
-                    {% if period and holiday == "off" %}
+                    {% if period %}
                         <tr>
                             <td style="background-color: #f0f0f0;">
                                 <strong>Period: {{ period }}</strong>
